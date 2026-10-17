@@ -1,6 +1,5 @@
 # Laboratorio 1 - Grupo 3 - Ejecución
 
----
 ## Sistema de Gestión de Festivales de Música
 
 Una plataforma para gestionar festivales, recintos, escenarios, artistas,
@@ -75,11 +74,15 @@ laboratorio-1-grupo-3/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── database/                 # Scripts SQL requeridos
-│   └── init.sql              # Tablas, triggers, procedures, views y seeders
+├── database/                 # Scripts SQL
+│   └── create.sql            # Tablas
+│   └── fill.sql              # Datos de prueba
+│   └── triggers.sql          # Triggers
+│   └── procedures.sql        # Procedures
+│   └── views.sql             # Views
 │
 ├── presentacion/             # Diapositivas
 │   └── presentacion.pdf
 │
 ├── docker-compose.yml
-└── README.md                 # Manual de despliegue y documentación de API
+└── README.md                 # Manual de despliegue y documentación de la API
