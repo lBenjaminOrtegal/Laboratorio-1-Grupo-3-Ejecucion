@@ -13,13 +13,15 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 - Fabian Herrera
 - Matias Lagos
 - Benjamin Ortega
+- 
 ---
-### Tecnologias
+### Tecnologías
 
 - Backend: Express.js (Node.js)
 - Frontend: React (Vite)
 - Estilos: _Por definir: heroui o shadcn (tailwindcss)_
 - BD: PostgreSQL
+
 ---
 ### To-Do
 
@@ -62,12 +64,20 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 laboratorio-1-grupo-3/
 ├── backend/                  # Proyecto Express.js (Node.js)
 │   ├── src/
+│   │   ├── config/
 │   │   ├── controllers/
-│   │   ├── middlewares/      # Middleware JWT y RBAC
-│   │   ├── db/               # Conexión con BD
+│   │   ├── interfaces/       
+│   │   ├── middlewares/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
 │   │   └── routes/
+│   │   └── app.ts
+│   │   └── server.ts
+│   ├── Dockerfile
 │   ├── package.json
-│   └── Dockerfile
+│   ├── package-lock.json
+│   └── tsconfig.json
 │
 ├── frontend/                 # Proyecto React (Vite)
 │   ├── src/
@@ -86,3 +96,9 @@ laboratorio-1-grupo-3/
 │
 ├── docker-compose.yml
 └── README.md                 # Manual de despliegue y documentación de la API
+```
+
+---
+### Diagrama MER
+
+![Diagrama MER BD Sistema de Gestión de Festivales de Música](./DiagramaMER.png)

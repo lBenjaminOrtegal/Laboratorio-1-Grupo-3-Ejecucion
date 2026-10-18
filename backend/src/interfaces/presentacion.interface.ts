@@ -10,7 +10,7 @@ export interface Presentacion {
 }
 
 export interface CreatePresentacionDTO {
-    fecha_inicio: string; // Formato ISO o 'YYYY-MM-DD HH:mm:ss'
+    fecha_inicio: string;
     fecha_fin: string;
     estado?: EstadoPresentacion;
     id_artista: number;

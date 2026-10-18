@@ -2,7 +2,7 @@ import { PresentacionRepository } from '../repositories/presentacion.repository.
 import {
     CreatePresentacionDTO,
     UpdatePresentacionDTO,
-} from '../types/presentacion.types.js';
+} from '../interfaces/presentacion.interface.js'
 
 export class PresentacionService {
     private presentacionRepository: PresentacionRepository;
