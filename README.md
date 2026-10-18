@@ -1,6 +1,6 @@
-# Laboratorio 1 - Grupo 3 - Ejecución
+# Sistema de Gestión de Festivales de Música
 
-## Sistema de Gestión de Festivales de Música
+**Laboratorio 1 - Grupo 3 - Ejecución**
 
 Una plataforma para gestionar festivales, recintos, escenarios, artistas,
 presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso.
@@ -13,7 +13,7 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 - Fabian Herrera
 - Matias Lagos
 - Benjamin Ortega
-- 
+
 ---
 ### Tecnologías
 
@@ -102,3 +102,26 @@ laboratorio-1-grupo-3/
 ### Diagrama MER
 
 ![Diagrama MER BD Sistema de Gestión de Festivales de Música](./DiagramaMER.png)
+
+---
+### Documentación API
+
+1. presentacion
+
+| Método | Endpoint                  | Descripción                      |
+|--------|---------------------------|----------------------------------|
+| GET    | `/api/presentaciones`     | Listar todas las presentaciones  |
+| GET    | `/api/presentaciones/:id` | Lista una presentacion por su id |
+| POST   | `/api/presentaciones`     | Crear una presentacion           |
+| PUT    | `/api/presentaciones/:id` | Modificar una presentacion       |
+| DELETE | `/api/presentaciones/:id` | Eliminar una presentacion (BD)   |
+
+2. tipo_entrada
+
+| Método | Endpoint                 | Descripción                        |
+|--------|--------------------------|------------------------------------|
+| GET    | `/api/tipos-entrada`     | Listar todos los tipos de entradas |
+| GET    | `/api/tipos-entrada/:id` | Lista un tipo de entrada por su id |
+| POST   | `/api/tipos-entrada`     | Crear un tipo de entrada           |
+| PUT    | `/api/tipos-entrada/:id` | Modificar un tipo de entrada       |
+| DELETE | `/api/tipos-entrada/:id` | Eliminar un tipo de entrada (BD)   |
