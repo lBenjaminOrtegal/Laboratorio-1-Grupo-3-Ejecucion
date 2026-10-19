@@ -28,3 +28,4 @@ frontend/.env.test.local
 frontend/.env.production.local
 frontend/*.log
 frontend/logs/
+**/node_modules/
