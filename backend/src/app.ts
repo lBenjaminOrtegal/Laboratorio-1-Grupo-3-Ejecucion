@@ -5,6 +5,7 @@ import { errorHandler } from './middlewares/error.middleware.js';
 import presentacionesRoutes from './routes/presentacion.routes.js';
 import tiposEntradaRoutes from './routes/tipo_entrada.routes.js';
 import escenarioRoutes from './routes/escenario.routes.js';
+import ordenCompraRoutes from './routes/orden_compra.routes.js';
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 app.use('/api/presentaciones', presentacionesRoutes); // CRUD Presentaciones
 app.use('/api/tipos-entrada', tiposEntradaRoutes); // CRUD Tipos de entrada
 app.use('/api/escenarios', escenarioRoutes); // CRUD Escenarios
+app.use('/api/ordenes-compra', ordenCompraRoutes); // CRUD Ordenes de compra
 
 app.use(errorHandler);
 

@@ -125,3 +125,23 @@ laboratorio-1-grupo-3/
 | POST   | `/api/tipos-entrada`     | Crear un tipo de entrada           |
 | PUT    | `/api/tipos-entrada/:id` | Modificar un tipo de entrada       |
 | DELETE | `/api/tipos-entrada/:id` | Eliminar un tipo de entrada (BD)   |
+
+3. escenario
+
+| Método | Endpoint              | Descripción                  |
+|--------|-----------------------|------------------------------|
+| GET    | `/api/escenarios`     | Listar todos los escenarios  |
+| GET    | `/api/escenarios/:id` | Lista un escenario por su id |
+| POST   | `/api/escenarios`     | Crear un escenario           |
+| PUT    | `/api/escenarios/:id` | Modificar un escenario       |
+| DELETE | `/api/escenarios/:id` | Eliminar un escenario (BD)   |
+
+4. orden_compra
+
+| Método | Endpoint                  | Descripción                         |
+|--------|---------------------------|-------------------------------------|
+| GET    | `/api/ordenes-compra`     | Listar todas las ordenes de compra  |
+| GET    | `/api/ordenes-compra/:id` | Lista una orden de compra por su id |
+| POST   | `/api/ordenes-compra`     | Crear una orden de compra           |
+| PUT    | `/api/ordenes-compra/:id` | Modificar una orden de compra       |
+| DELETE | `/api/ordenes-compra/:id` | Eliminar una orden de compra (BD)   |
