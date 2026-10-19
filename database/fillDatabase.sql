@@ -103,7 +103,7 @@ INSERT INTO orden_compra (fecha_compra, monto, metodo_pago, estado, id_asistente
 ('2026-10-11 10:15:00', 260000.00, 'TARJETA_DEBITO',  'PAGADO',      4), -- 2. Valentina: 2 VIP Día 1
 ('2026-10-13 09:30:00', 130000.00, 'TARJETA_CREDITO', 'PAGADO',      6), -- 3. Camila: 2 General Día 2
 ('2026-10-14 21:00:00',  45000.00, 'TARJETA_DEBITO',  'PAGADO',      3), -- 4. Matías: 1 Sur Rock
-('2026-10-15 08:30:00',  65000.00, 'TRANSFERENCIA',   'PENDIENTE',   5), -- 5. Diego: Esperando comprobante
+('2026-10-15 08:30:00',  65000.00, 'TARJETA_DEBITO',   'PENDIENTE',   5), -- 5. Diego: Esperando comprobante
 ('2026-10-16 12:10:00', 130000.00, 'TARJETA_CREDITO', 'FALLIDO',     5), -- 6. Diego: Error en la pasarela de pago
 ('2026-10-16 16:45:00',  45000.00, 'TARJETA_DEBITO',  'CANCELADO',   6), -- 7. Camila: Carrito abandonado/anulado
 ('2026-10-17 10:00:00', 260000.00, 'TARJETA_CREDITO', 'REEMBOLSADO', 4); -- 8. Valentina: Reembolso VIP procesado
