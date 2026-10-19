@@ -95,14 +95,18 @@ INSERT INTO tipo_entrada (nombre, descripcion, precio, stock_inicial, stock_disp
 ('Entrada General Sur Rock', 'Acceso general al Estadio Ester Roa el sábado 5 de diciembre', 45000.00, 80, 79, '2026-12-05', 2);
 
 -- -------------------------------------------------------------------------
--- 8. ÓRDENES DE COMPRA
+-- 8. ÓRDENES DE COMPRA (DATOS DE PRUEBA)
 -- -------------------------------------------------------------------------
-INSERT INTO orden_compra (fecha_compra, monto, metodo_pago, id_asistente) VALUES
-('2026-10-10 14:20:00', 130000.00, 'TARJETA_CREDITO', 3), -- Orden 1: Matías compra 2 General Día 1
-('2026-10-11 10:15:00', 260000.00, 'TARJETA_DEBITO',  4), -- Orden 2: Valentina compra 2 VIP Día 1
-('2026-10-12 18:45:00',  65000.00, 'TRANSFERENCIA',   5), -- Orden 3: Diego compra 1 General Día 1
-('2026-10-13 09:30:00', 130000.00, 'TARJETA_CREDITO', 6), -- Orden 4: Camila compra 2 General Día 2
-('2026-10-14 21:00:00',  45000.00, 'TARJETA_DEBITO',  3); -- Orden 5: Matías compra 1 Sur Rock
+INSERT INTO orden_compra (fecha_compra, monto, metodo_pago, estado, id_asistente) VALUES
+-- Órdenes exitosas estándar (PAGADO)
+('2026-10-10 14:20:00', 130000.00, 'TARJETA_CREDITO', 'PAGADO',      3), -- 1. Matías: 2 General Día 1
+('2026-10-11 10:15:00', 260000.00, 'TARJETA_DEBITO',  'PAGADO',      4), -- 2. Valentina: 2 VIP Día 1
+('2026-10-13 09:30:00', 130000.00, 'TARJETA_CREDITO', 'PAGADO',      6), -- 3. Camila: 2 General Día 2
+('2026-10-14 21:00:00',  45000.00, 'TARJETA_DEBITO',  'PAGADO',      3), -- 4. Matías: 1 Sur Rock
+('2026-10-15 08:30:00',  65000.00, 'TRANSFERENCIA',   'PENDIENTE',   5), -- 5. Diego: Esperando comprobante
+('2026-10-16 12:10:00', 130000.00, 'TARJETA_CREDITO', 'FALLIDO',     5), -- 6. Diego: Error en la pasarela de pago
+('2026-10-16 16:45:00',  45000.00, 'TARJETA_DEBITO',  'CANCELADO',   6), -- 7. Camila: Carrito abandonado/anulado
+('2026-10-17 10:00:00', 260000.00, 'TARJETA_CREDITO', 'REEMBOLSADO', 4); -- 8. Valentina: Reembolso VIP procesado
 
 -- -------------------------------------------------------------------------
 -- 9. TICKETS
