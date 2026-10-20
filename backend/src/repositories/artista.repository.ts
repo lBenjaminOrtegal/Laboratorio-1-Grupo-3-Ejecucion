@@ -31,10 +31,10 @@ export class ArtistaRepository {
             SET nombre = COALESCE($1, nombre),
                 genero = COALESCE($2, genero),
                 pais = COALESCE($3, pais)
-            WHERE id = $3
+            WHERE id = $4
             RETURNING *;
         `;
-        const values = [data.nombre ?? null, data.genero ?? null, id];
+        const values = [data.nombre ?? null, data.genero ?? null, data.pais ?? null, id];
         const { rows } = await pool.query(query, values);
         return rows[0] || null;
     }
