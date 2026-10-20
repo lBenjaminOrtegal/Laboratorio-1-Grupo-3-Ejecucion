@@ -6,6 +6,8 @@ import presentacionesRoutes from './routes/presentacion.routes.js';
 import tiposEntradaRoutes from './routes/tipo_entrada.routes.js';
 import escenarioRoutes from './routes/escenario.routes.js';
 import ordenCompraRoutes from './routes/orden_compra.routes.js';
+import festivalRoutes from './routes/festival.routes.js';
+import ticketRoutes from './routes/ticket.routes.js';
 
 const app: Application = express();
 
@@ -20,6 +22,8 @@ app.use('/api/presentaciones', presentacionesRoutes); // CRUD Presentaciones
 app.use('/api/tipos-entrada', tiposEntradaRoutes); // CRUD Tipos de entrada
 app.use('/api/escenarios', escenarioRoutes); // CRUD Escenarios
 app.use('/api/ordenes-compra', ordenCompraRoutes); // CRUD Ordenes de compra
+app.use('/api/festivales', festivalRoutes); // CRUD Festivales
+app.use('/api/tickets', ticketRoutes); // CRUD Tickets
 
 app.use(errorHandler);
 
