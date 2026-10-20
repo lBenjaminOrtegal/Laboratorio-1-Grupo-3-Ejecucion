@@ -1,6 +1,6 @@
-# Laboratorio 1 - Grupo 3 - Ejecución
+# Sistema de Gestión de Festivales de Música
 
-## Sistema de Gestión de Festivales de Música
+**Laboratorio 1 - Grupo 3 - Ejecución**
 
 Una plataforma para gestionar festivales, recintos, escenarios, artistas,
 presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso.
@@ -13,13 +13,15 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 - Fabian Herrera
 - Matias Lagos
 - Benjamin Ortega
+
 ---
-### Tecnologias
+### Tecnologías
 
 - Backend: Express.js (Node.js)
 - Frontend: React (Vite)
 - Estilos: _Por definir: heroui o shadcn (tailwindcss)_
 - BD: PostgreSQL
+
 ---
 ### To-Do
 
@@ -62,12 +64,20 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 laboratorio-1-grupo-3/
 ├── backend/                  # Proyecto Express.js (Node.js)
 │   ├── src/
+│   │   ├── config/
 │   │   ├── controllers/
-│   │   ├── middlewares/      # Middleware JWT y RBAC
-│   │   ├── db/               # Conexión con BD
+│   │   ├── interfaces/       
+│   │   ├── middlewares/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
 │   │   └── routes/
+│   │   └── app.ts
+│   │   └── server.ts
+│   ├── Dockerfile
 │   ├── package.json
-│   └── Dockerfile
+│   ├── package-lock.json
+│   └── tsconfig.json
 │
 ├── frontend/                 # Proyecto React (Vite)
 │   ├── src/
@@ -86,3 +96,52 @@ laboratorio-1-grupo-3/
 │
 ├── docker-compose.yml
 └── README.md                 # Manual de despliegue y documentación de la API
+```
+
+---
+### Diagrama MER
+
+![Diagrama MER BD Sistema de Gestión de Festivales de Música](./DiagramaMER.png)
+
+---
+### Documentación API
+
+1. presentacion
+
+| Método | Endpoint                  | Descripción                      |
+|--------|---------------------------|----------------------------------|
+| GET    | `/api/presentaciones`     | Listar todas las presentaciones  |
+| GET    | `/api/presentaciones/:id` | Lista una presentacion por su id |
+| POST   | `/api/presentaciones`     | Crear una presentacion           |
+| PUT    | `/api/presentaciones/:id` | Modificar una presentacion       |
+| DELETE | `/api/presentaciones/:id` | Eliminar una presentacion (BD)   |
+
+2. tipo_entrada
+
+| Método | Endpoint                 | Descripción                        |
+|--------|--------------------------|------------------------------------|
+| GET    | `/api/tipos-entrada`     | Listar todos los tipos de entradas |
+| GET    | `/api/tipos-entrada/:id` | Lista un tipo de entrada por su id |
+| POST   | `/api/tipos-entrada`     | Crear un tipo de entrada           |
+| PUT    | `/api/tipos-entrada/:id` | Modificar un tipo de entrada       |
+| DELETE | `/api/tipos-entrada/:id` | Eliminar un tipo de entrada (BD)   |
+
+3. escenario
+
+| Método | Endpoint              | Descripción                  |
+|--------|-----------------------|------------------------------|
+| GET    | `/api/escenarios`     | Listar todos los escenarios  |
+| GET    | `/api/escenarios/:id` | Lista un escenario por su id |
+| POST   | `/api/escenarios`     | Crear un escenario           |
+| PUT    | `/api/escenarios/:id` | Modificar un escenario       |
+| DELETE | `/api/escenarios/:id` | Eliminar un escenario (BD)   |
+
+4. orden_compra
+
+| Método | Endpoint                  | Descripción                         |
+|--------|---------------------------|-------------------------------------|
+| GET    | `/api/ordenes-compra`     | Listar todas las ordenes de compra  |
+| GET    | `/api/ordenes-compra/:id` | Lista una orden de compra por su id |
+| POST   | `/api/ordenes-compra`     | Crear una orden de compra           |
+| PUT    | `/api/ordenes-compra/:id` | Modificar una orden de compra       |
+| DELETE | `/api/ordenes-compra/:id` | Eliminar una orden de compra (BD)   |

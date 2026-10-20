@@ -10,7 +10,7 @@ async function startServer() {
   try {
     await pool.query('SELECT 1');
     app.listen(PORT, () => {
-      console.log(`Servidor TypeScript escuchando en http://localhost:${PORT}`);
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Error conectando a PostgreSQL:', error);
