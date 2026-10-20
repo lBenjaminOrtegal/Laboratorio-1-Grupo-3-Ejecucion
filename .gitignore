@@ -29,3 +29,4 @@ frontend/.env.production.local
 frontend/*.log
 frontend/logs/
 **/node_modules/
+backend/.env.example
