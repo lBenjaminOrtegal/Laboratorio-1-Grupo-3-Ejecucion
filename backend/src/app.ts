@@ -6,6 +6,8 @@ import presentacionesRoutes from './routes/presentacion.routes.js';
 import tiposEntradaRoutes from './routes/tipo_entrada.routes.js';
 import escenarioRoutes from './routes/escenario.routes.js';
 import ordenCompraRoutes from './routes/orden_compra.routes.js';
+import usuariosRoutes from './routes/usuario.routes.js';
+import notificacionesRoutes from './routes/notificacion.routes.js';
 import festivalRoutes from './routes/festival.routes.js';
 import ticketRoutes from './routes/ticket.routes.js';
 import artistaRoutes from './routes/artista.routes.js';
@@ -30,6 +32,9 @@ app.use('/api/tickets', ticketRoutes); // CRUD Tickets
 app.use('/api/artistas', artistaRoutes); // CRUD Artistas
 app.use('/api/recintos', recintoRoutes); // CRUD Recintos
 app.use('/api/auditorias', auditoriaRoutes); // CRUD Auditorias
+
+app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/notificaciones', notificacionesRoutes);
 
 app.use(errorHandler);
 
