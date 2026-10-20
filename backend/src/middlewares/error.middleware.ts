@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 interface DatabaseError extends Error {
+  status?: number;
   code?: string;
   detail?: string;
   constraint?: string;
@@ -12,6 +13,14 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+
+ // Manejo de errores de validación de datos
+  if (err.status && err.status >= 400 && err.status < 500) {
+  return res.status(err.status).json({
+    error: err.message,
+  });
+}
+
   // Excepción lanzada por Triggers (RAISE EXCEPTION en PostgreSQL)
   if (err.code === 'P0001') {
     return res.status(400).json({
