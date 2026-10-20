@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 interface DatabaseError extends Error {
+  status?: number;
   code?: string;
   detail?: string;
   constraint?: string;
@@ -44,7 +45,7 @@ export const errorHandler = (
     });
   }
 
-  return res.status(500).json({
+  return res.status(err.status || 500).json({
     error: err.message || 'Error interno del servidor.',
   });
 };
