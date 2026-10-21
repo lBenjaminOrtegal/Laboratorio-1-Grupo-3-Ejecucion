@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { RecintoService } from '../services/recinto.service.js';
+import {Request, Response, NextFunction} from 'express';
+import {RecintoService} from '../services/recinto.service.js';
 
 const recintoService = new RecintoService();
 

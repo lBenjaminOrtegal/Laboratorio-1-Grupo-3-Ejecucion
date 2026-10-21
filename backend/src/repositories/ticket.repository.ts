@@ -32,9 +32,10 @@ export class TicketRepository {
                    t.fecha_uso,
                    t.id_tipo_entrada
             FROM ticket t
-            WHERE t.id_orden_compra = $1 AND t.id = $2;
+            WHERE t.id_orden_compra = $1
+              AND t.id = $2;
         `;
-        const { rows } = await pool.query(query, [idOrdenCompra, id]);
+        const {rows} = await pool.query(query, [idOrdenCompra, id]);
         return rows[0] || null;
     }
 
@@ -42,14 +43,12 @@ export class TicketRepository {
     async create(data: CreateTicketDTO): Promise<Ticket> {
         const query = `
             INSERT INTO ticket (id, id_orden_compra, estado, codigo_unico, fecha_uso, id_tipo_entrada)
-            VALUES (
-                (SELECT COALESCE(MAX(id), 0) + 1 FROM ticket WHERE id_orden_compra = $1),
-                $1,
-                COALESCE($2, 'VALIDO'),
-                $3,
-                $4,
-                $5
-            )
+            VALUES ((SELECT COALESCE(MAX(id), 0) + 1 FROM ticket WHERE id_orden_compra = $1),
+                    $1,
+                    COALESCE($2, 'VALIDO'),
+                    $3,
+                    $4,
+                    $5)
             RETURNING *;
         `;
         const values = [
@@ -67,11 +66,12 @@ export class TicketRepository {
     async update(idOrdenCompra: number, id: number, data: UpdateTicketDTO): Promise<Ticket | null> {
         const query = `
             UPDATE ticket
-            SET estado = COALESCE($1, estado),
-                codigo_unico = COALESCE($2, codigo_unico),
-                fecha_uso = COALESCE($3, fecha_uso),
+            SET estado          = COALESCE($1, estado),
+                codigo_unico    = COALESCE($2, codigo_unico),
+                fecha_uso       = COALESCE($3, fecha_uso),
                 id_tipo_entrada = COALESCE($4, id_tipo_entrada)
-            WHERE id_orden_compra = $5 AND id = $6
+            WHERE id_orden_compra = $5
+              AND id = $6
             RETURNING *;
         `;
         const values = [
@@ -89,8 +89,10 @@ export class TicketRepository {
     // 5. DELETE (Eliminar un ticket)
     async delete(idOrdenCompra: number, id: number): Promise<Ticket | null> {
         const query = `
-            DELETE FROM ticket
-            WHERE id_orden_compra = $1 AND id = $2
+            DELETE
+            FROM ticket
+            WHERE id_orden_compra = $1
+              AND id = $2
             RETURNING *;
         `;
         const {rows} = await pool.query(query, [idOrdenCompra, id]);

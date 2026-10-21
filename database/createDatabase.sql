@@ -6,7 +6,8 @@ CREATE TABLE usuario (
     correo VARCHAR(150) UNIQUE NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     credito_acumulado NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (credito_acumulado >= 0),
-    rol VARCHAR(20) NOT NULL CHECK (rol IN ('PRODUCTOR', 'ASISTENTE'))
+    rol VARCHAR(20) NOT NULL CHECK (rol IN ('PRODUCTOR', 'ASISTENTE')),
+    activo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- 2. Tabla Recinto

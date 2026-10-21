@@ -79,7 +79,8 @@ export class PresentacionRepository {
                 estado       = COALESCE($3, estado),
                 id_artista   = COALESCE($4, id_artista),
                 id_escenario = COALESCE($5, id_escenario)
-            WHERE id = $6 RETURNING *;
+            WHERE id = $6
+            RETURNING *;
         `;
         const values = [
             data.fecha_inicio ?? null,
@@ -99,7 +100,8 @@ export class PresentacionRepository {
         const query = `
             DELETE
             FROM presentacion
-            WHERE id = $1 RETURNING *;
+            WHERE id = $1
+            RETURNING *;
         `;
         const {rows} = await pool.query(query, [id]);
         return rows[0] || null;

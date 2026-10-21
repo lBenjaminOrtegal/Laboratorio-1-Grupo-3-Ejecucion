@@ -1,4 +1,4 @@
-import { TicketRepository } from '../repositories/ticket.repository.js';
+import {TicketRepository} from '../repositories/ticket.repository.js';
 import {
     CreateTicketDTO,
     UpdateTicketDTO,

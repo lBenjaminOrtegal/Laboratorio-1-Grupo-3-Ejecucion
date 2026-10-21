@@ -1,4 +1,4 @@
-import { FestivalRepository } from '../repositories/festival.repository.js';
+import {FestivalRepository} from '../repositories/festival.repository.js';
 import {
     CreateFestivalDTO,
     UpdateFestivalDTO,

@@ -1,6 +1,6 @@
-import{OrdenCompraRepository} from '../repositories/orden_compra.repository.js';
-import{
-    CreateOrdenCompraDTO, 
+import {OrdenCompraRepository} from '../repositories/orden_compra.repository.js';
+import {
+    CreateOrdenCompraDTO,
     UpdateOrdenCompraDTO
 } from '../interfaces/orden_compra.interface.js';
 
@@ -58,7 +58,7 @@ export class OrdenCompraService {
     async eliminarOrdenCompra(id: number) {
         // Validacion de existencia de la orden de compra antes de eliminarla
         const eliminada = await this.ordenCompraRepository.delete(id);
-        
+
         if (!eliminada) {
             const error: any = new Error('Orden de compra no encontrada.');
             error.status = 404;

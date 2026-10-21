@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { TipoEntradaService } from '../services/tipo_entrada.service.js';
+import {Request, Response, NextFunction} from 'express';
+import {TipoEntradaService} from '../services/tipo_entrada.service.js';
 
 const tipoEntradaService = new TipoEntradaService();
 

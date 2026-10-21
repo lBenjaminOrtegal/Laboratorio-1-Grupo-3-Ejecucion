@@ -1,4 +1,4 @@
-import { AuditoriaRepository } from '../repositories/auditoria.repository.js';
+import {AuditoriaRepository} from '../repositories/auditoria.repository.js';
 
 export class AuditoriaService {
     private auditoriaRepository: AuditoriaRepository;

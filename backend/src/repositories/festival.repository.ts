@@ -1,8 +1,8 @@
 import {pool} from '../config/db.js'
-import { 
+import {
     Festival,
-    CreateFestivalDTO, 
-    UpdateFestivalDTO 
+    CreateFestivalDTO,
+    UpdateFestivalDTO
 } from '../interfaces/festival.interface.js'
 
 export class FestivalRepository {
@@ -32,8 +32,10 @@ export class FestivalRepository {
         await pool.query(
             `UPDATE festival
              SET estado = 'FINALIZADO'
-             WHERE id = $1 AND estado = 'ACTIVO' AND fecha_fin < CURRENT_DATE;
-            `,[id]
+             WHERE id = $1
+               AND estado = 'ACTIVO'
+               AND fecha_fin < CURRENT_DATE;
+            `, [id]
         );
 
         const query = `
@@ -74,11 +76,11 @@ export class FestivalRepository {
     async update(id: number, data: UpdateFestivalDTO): Promise<Festival | null> {
         const query = `
             UPDATE festival
-            SET nombre = COALESCE($1, nombre),    
+            SET nombre       = COALESCE($1, nombre),
                 fecha_inicio = COALESCE($2, fecha_inicio),
-                fecha_fin = COALESCE($3, fecha_fin),
-                estado = COALESCE($4, estado),
-                id_recinto = COALESCE($5, id_recinto),
+                fecha_fin    = COALESCE($3, fecha_fin),
+                estado       = COALESCE($4, estado),
+                id_recinto   = COALESCE($5, id_recinto),
                 id_productor = COALESCE($6, id_productor)
             WHERE id = $7
             RETURNING *;
@@ -99,7 +101,8 @@ export class FestivalRepository {
     // 5. DELETE (Eliminar un festival)
     async delete(id: number): Promise<Festival | null> {
         const query = `
-            DELETE FROM festival
+            DELETE
+            FROM festival
             WHERE id = $1
             RETURNING *;
         `;

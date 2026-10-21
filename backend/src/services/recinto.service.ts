@@ -1,4 +1,4 @@
-import { RecintoRepository } from '../repositories/recinto.repository.js';
+import {RecintoRepository} from '../repositories/recinto.repository.js';
 import {
     CreateRecintoDTO,
     UpdateRecintoDTO,
@@ -65,6 +65,6 @@ export class RecintoService {
             throw error;
         }
 
-        return { message: 'Recinto eliminado correctamente.' };
+        return {message: 'Recinto eliminado correctamente.'};
     }
 }

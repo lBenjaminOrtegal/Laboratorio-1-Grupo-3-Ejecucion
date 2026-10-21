@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { ArtistaController } from '../controllers/artista.controller.js';
+import {Router} from 'express';
+import {ArtistaController} from '../controllers/artista.controller.js';
 
 const artistaController = new ArtistaController();
 const artistaRouter = Router();

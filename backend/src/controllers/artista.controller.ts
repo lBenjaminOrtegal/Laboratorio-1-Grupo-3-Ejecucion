@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { ArtistaService } from '../services/artista.service.js';
+import {Request, Response, NextFunction} from 'express';
+import {ArtistaService} from '../services/artista.service.js';
 
 const artistaService = new ArtistaService();
 

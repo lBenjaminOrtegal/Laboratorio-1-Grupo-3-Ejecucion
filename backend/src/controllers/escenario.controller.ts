@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
-import { EscenarioService } from '../services/escenario.service.js';
+import {EscenarioService} from '../services/escenario.service.js';
 
 const escenarioService = new EscenarioService();
 

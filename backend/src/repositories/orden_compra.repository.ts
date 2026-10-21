@@ -40,11 +40,11 @@ export class OrdenCompraRepository {
             INSERT INTO orden_compra (monto, metodo_pago, estado, id_asistente)
             VALUES ($1, $2, COALESCE($3, 'PENDIENTE'), $4) RETURNING *;
         `;
-        const values = [data.monto, 
-                        data.metodo_pago, 
-                        data.estado ?? null, 
-                        data.id_asistente
-                    ];
+        const values = [data.monto,
+            data.metodo_pago,
+            data.estado ?? null,
+            data.id_asistente
+        ];
         const {rows} = await pool.query(query, values);
         return rows[0];
     }
@@ -53,9 +53,9 @@ export class OrdenCompraRepository {
     async update(id: number, data: UpdateOrdenCompraDTO): Promise<OrdenCompra | null> {
         const query = `
             UPDATE orden_compra
-            SET monto = COALESCE($1, monto),    
-                metodo_pago = COALESCE($2, metodo_pago),
-                estado = COALESCE($3, estado),
+            SET monto        = COALESCE($1, monto),
+                metodo_pago  = COALESCE($2, metodo_pago),
+                estado       = COALESCE($3, estado),
                 id_asistente = COALESCE($4, id_asistente)
             WHERE id = $5
             RETURNING *;
@@ -73,7 +73,8 @@ export class OrdenCompraRepository {
     // 5. DELETE (Eliminar una orden de compra)
     async delete(id: number): Promise<OrdenCompra | null> {
         const query = `
-            DELETE FROM orden_compra
+            DELETE
+            FROM orden_compra
             WHERE id = $1
             RETURNING *;
         `;

@@ -72,13 +72,13 @@ export class TipoEntradaRepository {
     async update(id: number, data: UpdateTipoEntradaDTO): Promise<TipoEntrada | null> {
         const query = `
             UPDATE tipo_entrada
-            SET nombre = COALESCE($1, nombre),
-                descripcion = COALESCE($2, descripcion),
-                precio = COALESCE($3, precio),
-                stock_inicial = COALESCE($4, stock_inicial),
+            SET nombre           = COALESCE($1, nombre),
+                descripcion      = COALESCE($2, descripcion),
+                precio           = COALESCE($3, precio),
+                stock_inicial    = COALESCE($4, stock_inicial),
                 stock_disponible = COALESCE($5, stock_disponible),
-                fecha_acceso = COALESCE($6, fecha_acceso),
-                id_festival = COALESCE($7, id_festival)
+                fecha_acceso     = COALESCE($6, fecha_acceso),
+                id_festival      = COALESCE($7, id_festival)
             WHERE id = $8
             RETURNING *;
         `;

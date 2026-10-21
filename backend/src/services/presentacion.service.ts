@@ -1,4 +1,4 @@
-import { PresentacionRepository } from '../repositories/presentacion.repository.js';
+import {PresentacionRepository} from '../repositories/presentacion.repository.js';
 import {
     CreatePresentacionDTO,
     UpdatePresentacionDTO,

@@ -1,6 +1,6 @@
 export type EstadoFestival = 'ACTIVO' | 'FINALIZADO' | 'CANCELADO';
 
-export interface Festival{
+export interface Festival {
     id: number;
     nombre: string;
     fecha_inicio: Date;
@@ -10,7 +10,7 @@ export interface Festival{
     id_productor: number;
 }
 
-export interface CreateFestivalDTO{
+export interface CreateFestivalDTO {
     nombre: string;
     fecha_inicio: string;
     fecha_fin: string;
@@ -19,7 +19,7 @@ export interface CreateFestivalDTO{
     id_productor: number;
 }
 
-export interface UpdateFestivalDTO{
+export interface UpdateFestivalDTO {
     nombre?: string;
     fecha_inicio?: string;
     fecha_fin?: string;

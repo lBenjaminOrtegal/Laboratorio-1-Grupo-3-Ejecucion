@@ -1,4 +1,4 @@
-import { ArtistaRepository } from '../repositories/artista.repository.js';
+import {ArtistaRepository} from '../repositories/artista.repository.js';
 import {
     CreateArtistaDTO,
     UpdateArtistaDTO,
@@ -51,6 +51,6 @@ export class ArtistaService {
             throw error;
         }
 
-        return { message: 'Artista eliminado correctamente.' };
+        return {message: 'Artista eliminado correctamente.'};
     }
 }

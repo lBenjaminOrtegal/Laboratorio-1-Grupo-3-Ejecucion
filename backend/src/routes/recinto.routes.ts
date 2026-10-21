@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { RecintoController } from '../controllers/recinto.controller.js';
+import {Router} from 'express';
+import {RecintoController} from '../controllers/recinto.controller.js';
 
 const recintoController = new RecintoController();
 const recintoRouter = Router();

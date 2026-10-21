@@ -4,11 +4,11 @@ import {OrdenCompraService} from "../services/orden_compra.service.js";
 const ordenCompraService = new OrdenCompraService();
 
 export class OrdenCompraController {
-        /*
-        GET
-        /api/ordenes-compra
-        Devuelve todas las ordenes de compra
-    */
+    /*
+    GET
+    /api/ordenes-compra
+    Devuelve todas las ordenes de compra
+*/
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const ordenesCompra = await ordenCompraService.obtenerTodas();

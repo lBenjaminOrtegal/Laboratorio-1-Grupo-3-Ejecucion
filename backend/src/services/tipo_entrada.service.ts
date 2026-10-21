@@ -1,4 +1,4 @@
-import { TipoEntradaRepository } from '../repositories/tipo_entrada.repository.js';
+import {TipoEntradaRepository} from '../repositories/tipo_entrada.repository.js';
 import {
     CreateTipoEntradaDTO,
     UpdateTipoEntradaDTO,

@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { FestivalController } from '../controllers/festival.controller.js';
+import {Router} from 'express';
+import {FestivalController} from '../controllers/festival.controller.js';
 
 const router = Router();
 const controller = new FestivalController();

@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { AuditoriaService } from '../services/auditoria.service.js';
+import {Request, Response, NextFunction} from 'express';
+import {AuditoriaService} from '../services/auditoria.service.js';
 
 const auditoriaService = new AuditoriaService();
 

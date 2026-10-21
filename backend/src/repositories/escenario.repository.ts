@@ -15,7 +15,7 @@ export class EscenarioRepository {
                    e.id_festival,
                    f.nombre AS nombre_festival
             FROM escenario e
-            JOIN festival f ON e.id_festival = f.id
+                     JOIN festival f ON e.id_festival = f.id
             ORDER BY e.id ASC;
         `;
         const {rows} = await pool.query(query);

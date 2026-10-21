@@ -1,5 +1,7 @@
-
-export interface CreateNotificacionDTO { mensaje: string; id_usuario: number; }
+export interface CreateNotificacionDTO {
+    mensaje: string;
+    id_usuario: number;
+}
 
 /**
  * Define los datos necesarios para actualizar una notificación existente.
@@ -7,4 +9,9 @@ export interface CreateNotificacionDTO { mensaje: string; id_usuario: number; }
  */
 export type UpdateNotificacionDTO = Partial<CreateNotificacionDTO>;
 
-export interface Notificacion { id: number; mensaje: string; fecha_envio: Date; id_usuario: number; }
+export interface Notificacion {
+    id: number;
+    mensaje: string;
+    fecha_envio: Date;
+    id_usuario: number;
+}

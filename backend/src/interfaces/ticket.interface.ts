@@ -1,6 +1,6 @@
 export type EstadoTicket = 'VALIDO' | 'UTILIZADO' | 'ANULADO';
 
-export interface Ticket{
+export interface Ticket {
     id: number;
     id_orden_compra: number;
     estado: EstadoTicket;
@@ -9,7 +9,7 @@ export interface Ticket{
     id_tipo_entrada: number;
 }
 
-export interface CreateTicketDTO{
+export interface CreateTicketDTO {
     id_orden_compra: number;
     estado?: EstadoTicket;
     codigo_unico: string;
@@ -17,7 +17,7 @@ export interface CreateTicketDTO{
     id_tipo_entrada: number;
 }
 
-export interface UpdateTicketDTO{
+export interface UpdateTicketDTO {
     estado?: EstadoTicket;
     codigo_unico?: string;
     fecha_uso?: string | null;

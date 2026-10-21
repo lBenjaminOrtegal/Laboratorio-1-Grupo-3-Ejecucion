@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { TipoEntradaController } from '../controllers/tipo_entrada.controller.js';
+import {Router} from 'express';
+import {TipoEntradaController} from '../controllers/tipo_entrada.controller.js';
 
 const router = Router();
 const controller = new TipoEntradaController();

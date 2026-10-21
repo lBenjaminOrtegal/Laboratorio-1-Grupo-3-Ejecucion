@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { FestivalService } from '../services/festival.service.js';
+import {Request, Response, NextFunction} from 'express';
+import {FestivalService} from '../services/festival.service.js';
 
 const festivalService = new FestivalService();
 
