@@ -25,7 +25,7 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 ---
 ### To-Do
 
-1. API: CRUD completo de todas las entidades del modelo.
+1. ~~API: CRUD completo de todas las entidades del modelo.~~
 
 2. API/JWT: El Productor crea festivales y arma el line-up; el asistente compra entradas y
    solo puede ver sus propios tickets.
@@ -51,8 +51,8 @@ presentaciones (line-up), tipos de entrada, venta de tickets y control de acceso
 8. Índices: Indexar el código único del ticket (Hash) y el ID del festival para acelerar la
    validación de accesos y los reportes.
 
-9. API: Endpoint para obtener la grilla de presentaciones de un día del festival agrupada por
-   escenario.
+9. ~~API: Endpoint para obtener la grilla de presentaciones de un día del festival agrupada por
+   escenario.~~
 
 10. API: Endpoint de control de acceso que reciba el código de un ticket, verifique su validez
     y lo marque como utilizado, impidiendo su reutilización.
@@ -108,13 +108,14 @@ laboratorio-1-grupo-3/
 
 1. presentacion
 
-| Método | Endpoint                  | Descripción                      |
-|--------|---------------------------|----------------------------------|
-| GET    | `/api/presentaciones`     | Listar todas las presentaciones  |
-| GET    | `/api/presentaciones/:id` | Lista una presentacion por su id |
-| POST   | `/api/presentaciones`     | Crear una presentacion           |
-| PUT    | `/api/presentaciones/:id` | Modificar una presentacion       |
-| DELETE | `/api/presentaciones/:id` | Eliminar una presentacion (BD)   |
+| Método | Endpoint                                       | Descripción                                                                      |
+|--------|------------------------------------------------|----------------------------------------------------------------------------------|
+| GET    | `/api/presentaciones`                          | Listar todas las presentaciones                                                  |
+| GET    | `/api/presentaciones/grilla?id_festival&fecha` | Lista la grilla de presentaciones agrupadas por escenario para un dia especifico |
+| GET    | `/api/presentaciones/:id`                      | Lista una presentacion por su id                                                 |
+| POST   | `/api/presentaciones`                          | Crear una presentacion                                                           |
+| PUT    | `/api/presentaciones/:id`                      | Modificar una presentacion                                                       |
+| DELETE | `/api/presentaciones/:id`                      | Eliminar una presentacion (BD)                                                   |
 
 2. tipo_entrada
 

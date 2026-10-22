@@ -51,6 +51,29 @@ export class PresentacionRepository {
         return rows[0] || null;
     }
 
+    // READ (Grilla de presentaciones/line-up de un dia del festival agrupada por escenario
+    // Se requiere el id del festival y la fecha a consultar
+    async line_up(id_festival: number, fecha: string) {
+        const query = `
+            SELECT p.id     AS id_presentacion,
+                   a.nombre AS artista,
+                   a.genero AS genero,
+                   p.fecha_inicio,
+                   p.fecha_fin,
+                   p.estado,
+                   e.id     AS id_escenario,
+                   e.nombre AS escenario
+            FROM presentacion p
+                     JOIN escenario e ON p.id_escenario = e.id
+                     JOIN artista a ON p.id_artista = a.id
+            WHERE e.id_festival = $1
+              AND CAST(p.fecha_inicio AS date) = $2
+            ORDER BY e.id ASC, p.fecha_inicio ASC;
+        `;
+        const {rows} = await pool.query(query, [id_festival, fecha]);
+        return rows;
+    }
+
     // 3. CREATE (Crear una presentacion)
     // Se requiere fecha_inicio, fecha_fin, estado, id_artista, id_escenario
     async create(data: CreatePresentacionDTO): Promise<Presentacion> {

@@ -33,6 +33,35 @@ export class PresentacionController {
     }
 
     /*
+        GET
+        /api/presentaciones/grilla
+        Devuelve la grilla de presentaciones de un festival, en un dia especifico y agrupadas por escenario
+    */
+    async getLineUp(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id_festival = Number(req.query.id_festival);
+            const fecha = req.query.fecha as string;
+
+            if (!req.query.id_festival || isNaN(id_festival) || id_festival <= 0) {
+                return res.status(400).json({
+                    error: 'Debe proporcionar un parámetro id_festival numérico válido.',
+                });
+            }
+
+            if (!fecha) {
+                return res.status(400).json({
+                    error: 'Debe proporcionar el parámetro fecha (ej. ?fecha=2026-11-14).',
+                });
+            }
+
+            const resultado = await presentacionService.obtenerGrilla(id_festival, fecha);
+            return res.status(200).json(resultado);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /*
         POST
         /api/presentaciones
         Crea una presentacion

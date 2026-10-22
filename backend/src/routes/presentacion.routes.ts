@@ -5,6 +5,7 @@ const router = Router();
 const controller = new PresentacionController();
 
 router.get('/', controller.getAll);
+router.get('/grilla', controller.getLineUp);
 router.get('/:id', controller.getById);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

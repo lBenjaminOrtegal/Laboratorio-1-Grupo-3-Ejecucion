@@ -1,8 +1,5 @@
 import {PresentacionRepository} from '../repositories/presentacion.repository.js';
-import {
-    CreatePresentacionDTO,
-    UpdatePresentacionDTO,
-} from '../interfaces/presentacion.interface.js'
+import {CreatePresentacionDTO, UpdatePresentacionDTO,} from '../interfaces/presentacion.interface.js'
 
 export class PresentacionService {
     private presentacionRepository: PresentacionRepository;
@@ -23,6 +20,46 @@ export class PresentacionService {
             throw error;
         }
         return presentacion;
+    }
+
+    async obtenerGrilla(id_festival: number, fecha: string) {
+        const regexFecha = /^\d{4}-\d{2}-\d{2}$/;
+        if (!regexFecha.test(fecha)) {
+            const error: any = new Error('El formato de la fecha debe ser YYYY-MM-DD.');
+            error.status = 400;
+            throw error;
+        }
+
+        const presentaciones = await this.presentacionRepository.line_up(id_festival, fecha);
+
+        // Agrupar las filas por escenario
+        return Object.values(
+            presentaciones.reduce((acc: Record<number, any>, fila: any) => {
+                const idEscenario = fila.id_escenario;
+
+                // Si el escenario no existe lo inicializamos
+                if (!acc[idEscenario]) {
+                    acc[idEscenario] = {
+                        id_escenario: idEscenario,
+                        nombre_escenario: fila.nombre_escenario,
+                        presentaciones: []
+                    };
+                }
+
+                // Agregamos la presentacion a la lista de ese escenario
+                acc[idEscenario].presentaciones.push({
+                    id_presentacion: fila.id_presentacion,
+                    id_artista: fila.id_artista,
+                    nombre_artista: fila.nombre_artista,
+                    genero: fila.genero,
+                    fecha_inicio: fila.fecha_inicio,
+                    fecha_fin: fila.fecha_fin,
+                    estado: fila.estado
+                });
+
+                return acc;
+            }, {})
+        );
     }
 
     async crearPresentacion(data: CreatePresentacionDTO) {
