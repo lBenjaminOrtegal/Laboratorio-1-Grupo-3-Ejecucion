@@ -34,6 +34,10 @@ export class NotificacionService {
         return item;
     }
 
+    async obtenerPorUsuario(id: number) {
+        return await this.repository.findByUser(id);
+    }
+
     /**
      * Método privado para centralizar la validación y limpieza de los datos de la notificación.
      * Verifica la estructura del body, el tamaño del texto y la existencia del usuario destinatario.

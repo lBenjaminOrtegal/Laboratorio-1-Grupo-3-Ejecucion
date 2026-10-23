@@ -27,6 +27,14 @@ export class NotificacionRepository {
         return rows[0] ?? null;
     }
 
+    /*
+        Busca todas las notificaciones de un usuario
+    */
+    async findByUser(id: number): Promise<Notificacion | null> {
+        const {rows} = await pool.query('SELECT id, mensaje, fecha_envio FROM notificacion WHERE id_usuario = $1', [id]);
+        return rows[0] ?? null;
+    }
+
     /**
      * Inserta una nueva notificación en la base de datos vinculándola a un usuario destinatario.
      * @async

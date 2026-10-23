@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import {NotificacionService} from '../services/notificacion.service.js';
+import {AuthenticatedRequest} from "../interfaces/auth.interface.js";
 
 const service = new NotificacionService();
 
@@ -18,6 +19,20 @@ export class NotificacionController {
         try {
             const data = await service.obtenerTodas();
             return res.status(200).json(data);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /*
+        GET
+        Devuelve las notificaciones propias del usuario
+        /api/notificaciones/propias
+    */
+    async getByUser(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const notificaciones = await service.obtenerPorUsuario(req.user!.id);
+            return res.status(200).json(notificaciones);
         } catch (error) {
             next(error);
         }
