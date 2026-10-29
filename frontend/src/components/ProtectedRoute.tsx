@@ -23,7 +23,7 @@ export function ProtectedRoute({ element, requiredRole }: ProtectedRouteProps) {
   }
 
   if (requiredRole && user?.rol !== requiredRole) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return <>{element}</>;

@@ -18,8 +18,15 @@ export class FestivalRepository {
                        ELSE f.estado
                    END AS estado,
                    f.id_recinto,
-                   f.id_productor
+                   r.nombre AS nombre_recinto,
+                   r.ciudad AS ciudad_recinto,
+                   r.direccion AS direccion_recinto,
+                   f.id_productor,
+                   u.nombre AS nombre_productor,
+                   u.apellido AS apellido_productor
             FROM festival f
+            JOIN recinto r ON r.id = f.id_recinto
+            JOIN usuario u ON f.id_productor = u.id
             ORDER BY f.id ASC;
         `;
         const {rows} = await pool.query(query);
@@ -45,8 +52,15 @@ export class FestivalRepository {
                    f.fecha_fin,
                    f.estado,
                    f.id_recinto,
-                   f.id_productor
+                   r.nombre AS nombre_recinto,
+                   r.ciudad AS ciudad_recinto,
+                   r.direccion AS direccion_recinto,
+                   f.id_productor,
+                   u.nombre AS nombre_productor,
+                   u.apellido AS apellido_productor
             FROM festival f
+            JOIN recinto r ON r.id = f.id_recinto
+            JOIN usuario u ON f.id_productor = u.id
             WHERE f.id = $1;
         `;
         const {rows} = await pool.query(query, [id]);

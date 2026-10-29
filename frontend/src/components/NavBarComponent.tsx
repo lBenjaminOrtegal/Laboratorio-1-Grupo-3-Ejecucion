@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Menu, X, Music, Home, Ticket, LogOut, User } from "lucide-react";
+import { Menu, X, Music, Home, Ticket, LogOut, User, Plus, Pencil } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -32,7 +32,7 @@ function NavBarComponent() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 w-full border-b border-border bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -52,7 +52,7 @@ function NavBarComponent() {
               return (
                 <Link key={item.path} to={item.path}>
                   <Button
-                    variant={isActive(item.path) ? "default" : "ghost"}
+                    variant={isActive(item.path) ? "default" : "outline"}
                     className="gap-2"
                   >
                     <Icon className="w-4 h-4" />
@@ -68,13 +68,13 @@ function NavBarComponent() {
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-semibold">
+                  <Button size="icon" variant="ghost" className="rounded-full">
+                    <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-sm font-semibold">
                       {user.nombre.charAt(0).toUpperCase()}
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 p-2">
                   <DropdownMenuLabel className="flex flex-col">
                     <span>{user.nombre} {user.apellido}</span>
                     <span className="text-xs font-normal text-muted-foreground">
@@ -86,10 +86,22 @@ function NavBarComponent() {
                     <User className="w-4 h-4" />
                     <span>{user.rol === 'PRODUCTOR' ? 'Productor' : 'Asistente'}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2 cursor-pointer">
-                    <Ticket className="w-4 h-4" />
-                    Mis Tickets
-                  </DropdownMenuItem>
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/create-festival" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Plus className="w-4 h-4" />
+                        Crear Festival
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/manage-festivals" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Pencil className="w-4 h-4" />
+                        Gestionar Festivales
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="gap-2 cursor-pointer text-destructive"
