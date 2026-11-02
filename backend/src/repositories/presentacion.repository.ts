@@ -136,4 +136,14 @@ export class PresentacionRepository {
         const {rows} = await pool.query(query, [id]);
         return rows[0] || null;
     }
+
+
+    // 6. CANCELAR PRESENTACION
+    // Se requiere el id de la presentación a cancelar y el id del productor que realiza la accion.
+    async cancelar(id_presentacion: number, id_productor: number): Promise<void> {
+        const query = `
+            CALL cancelar_presentacion($1, $2);
+        `;
+        await pool.query(query, [id_presentacion, id_productor]);
+    }
 }

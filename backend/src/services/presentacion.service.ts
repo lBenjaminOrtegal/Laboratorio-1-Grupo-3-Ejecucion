@@ -1,5 +1,5 @@
-import {PresentacionRepository} from '../repositories/presentacion.repository.js';
-import {CreatePresentacionDTO, UpdatePresentacionDTO,} from '../interfaces/presentacion.interface.js'
+import { PresentacionRepository } from '../repositories/presentacion.repository.js';
+import { CreatePresentacionDTO, UpdatePresentacionDTO, } from '../interfaces/presentacion.interface.js'
 
 export class PresentacionService {
     private presentacionRepository: PresentacionRepository;
@@ -77,5 +77,21 @@ export class PresentacionService {
             throw error;
         }
         return eliminada;
+    }
+
+    async cancelarPresentacion(id_presentacion: number, id_productor: number): Promise<void> {
+        if (!Number.isInteger(id_presentacion) || id_presentacion <= 0 || id_presentacion > 2147483647) {
+            const error: any = new Error('El ID de la presentación debe ser un entero positivo válido.');
+            error.status = 400;
+            throw error;
+        }
+
+        if (!Number.isInteger(id_productor) || id_productor <= 0 || id_productor > 2147483647) {
+            const error: any = new Error('El ID del productor debe ser un entero positivo válido.');
+            error.status = 400;
+            throw error;
+        }
+
+        await this.presentacionRepository.cancelar(id_presentacion, id_productor);
     }
 }

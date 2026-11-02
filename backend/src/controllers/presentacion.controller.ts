@@ -1,5 +1,6 @@
-import {Request, Response, NextFunction} from 'express';
-import {PresentacionService} from '../services/presentacion.service.js';
+import { Request, Response, NextFunction } from 'express';
+import { PresentacionService } from '../services/presentacion.service.js';
+import { AuthenticatedRequest } from '../interfaces/auth.interface.js';
 
 const presentacionService = new PresentacionService();
 
@@ -109,6 +110,33 @@ export class PresentacionController {
             return res.status(200).json({
                 mensaje: 'Presentación eliminada correctamente.',
                 data: eliminada,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+
+    /*
+        POST
+        /api/presentaciones/:id/cancelar
+        Cancela una presentacion segun su id y el id del productor que realiza la accion.
+    */
+    async cancelar(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            if (!req.user) {
+                return res.status(401).json({
+                    error: 'Usuario no autenticado.',
+                });
+            }
+
+            const id_presentacion = Number(req.params.id);
+            const id_productor = req.user.id;
+
+            const cancelada = await presentacionService.cancelarPresentacion(id_presentacion, id_productor);
+
+            return res.status(200).json({
+                mensaje: 'Presentación cancelada correctamente.',
             });
         } catch (error) {
             next(error);

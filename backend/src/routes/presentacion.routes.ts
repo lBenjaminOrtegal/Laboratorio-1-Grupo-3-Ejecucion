@@ -15,5 +15,6 @@ router.get('/:id', controller.getById);
 router.post('/', authenticateJWT, authorizeRoles("PRODUCTOR"), controller.create);
 router.put('/:id', authenticateJWT, authorizeRoles("PRODUCTOR"), controller.update);
 router.delete('/:id', authenticateJWT, authorizeRoles("PRODUCTOR"), controller.delete);
+router.post('/:id/cancelar', authenticateJWT, authorizeRoles("PRODUCTOR"), controller.cancelar);
 
 export default router;
