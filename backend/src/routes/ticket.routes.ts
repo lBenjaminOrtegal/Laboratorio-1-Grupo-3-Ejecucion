@@ -6,6 +6,7 @@ const controller = new TicketController();
 
 router.get('/', controller.getAll);
 router.get('/:idOrdenCompra/:id', controller.getById);
+router.post('/validar', controller.validarAcceso);
 router.post('/', controller.create);
 router.put('/:idOrdenCompra/:id', controller.update);
 router.delete('/:idOrdenCompra/:id', controller.delete);
