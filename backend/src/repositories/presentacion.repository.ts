@@ -33,18 +33,21 @@ export class PresentacionRepository {
     // 2. READ (Obtener una presentacion por su id)
     async findById(id: number) {
         const query = `
-            SELECT p.id,
+            SELECT p.id     AS id_presentacion,
                    p.fecha_inicio,
                    p.fecha_fin,
                    p.estado,
                    p.id_artista,
                    a.nombre AS artista_nombre,
+                   a.genero AS artista_genero,
                    p.id_escenario,
                    e.nombre AS escenario_nombre,
-                   e.id_festival
+                   e.id_festival,
+                   f.nombre AS festival_nombre
             FROM presentacion p
                      JOIN artista a ON p.id_artista = a.id
                      JOIN escenario e ON p.id_escenario = e.id
+                     JOIN festival f ON e.id_festival = f.id
             WHERE p.id = $1;
         `;
         const {rows} = await pool.query(query, [id]);
@@ -55,17 +58,21 @@ export class PresentacionRepository {
     // Se requiere el id del festival y la fecha a consultar
     async line_up(id_festival: number, fecha: string) {
         const query = `
-            SELECT p.id     AS id_presentacion,
-                   a.nombre AS artista,
-                   a.genero AS genero,
+            SELECT p.id AS id_presentacion,
                    p.fecha_inicio,
                    p.fecha_fin,
                    p.estado,
+                   p.id_artista AS id_artista,
+                   a.nombre AS nombre_artista,
+                   a.genero AS genero_artista,
                    e.id     AS id_escenario,
-                   e.nombre AS escenario
+                   e.nombre AS nombre_escenario,
+                   f.id AS id_festival,
+                   f.nombre AS nombre_festival
             FROM presentacion p
                      JOIN escenario e ON p.id_escenario = e.id
                      JOIN artista a ON p.id_artista = a.id
+                    JOIN festival f ON f.id = e.id_festival
             WHERE e.id_festival = $1
               AND CAST(p.fecha_inicio AS date) = $2
             ORDER BY e.id ASC, p.fecha_inicio ASC;
@@ -128,5 +135,15 @@ export class PresentacionRepository {
         `;
         const {rows} = await pool.query(query, [id]);
         return rows[0] || null;
+    }
+
+
+    // 6. CANCELAR PRESENTACION
+    // Se requiere el id de la presentación a cancelar y el id del productor que realiza la accion.
+    async cancelar(id_presentacion: number, id_productor: number): Promise<void> {
+        const query = `
+            CALL cancelar_presentacion($1, $2);
+        `;
+        await pool.query(query, [id_presentacion, id_productor]);
     }
 }

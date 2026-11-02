@@ -1,5 +1,5 @@
-import {PresentacionRepository} from '../repositories/presentacion.repository.js';
-import {CreatePresentacionDTO, UpdatePresentacionDTO,} from '../interfaces/presentacion.interface.js'
+import { PresentacionRepository } from '../repositories/presentacion.repository.js';
+import { CreatePresentacionDTO, UpdatePresentacionDTO, } from '../interfaces/presentacion.interface.js'
 
 export class PresentacionService {
     private presentacionRepository: PresentacionRepository;
@@ -32,34 +32,20 @@ export class PresentacionService {
 
         const presentaciones = await this.presentacionRepository.line_up(id_festival, fecha);
 
-        // Agrupar las filas por escenario
-        return Object.values(
-            presentaciones.reduce((acc: Record<number, any>, fila: any) => {
-                const idEscenario = fila.id_escenario;
+        const mapa = new Map<number, any>();
 
-                // Si el escenario no existe lo inicializamos
-                if (!acc[idEscenario]) {
-                    acc[idEscenario] = {
-                        id_escenario: idEscenario,
-                        nombre_escenario: fila.nombre_escenario,
-                        presentaciones: []
-                    };
-                }
-
-                // Agregamos la presentacion a la lista de ese escenario
-                acc[idEscenario].presentaciones.push({
-                    id_presentacion: fila.id_presentacion,
-                    id_artista: fila.id_artista,
-                    nombre_artista: fila.nombre_artista,
-                    genero: fila.genero,
-                    fecha_inicio: fila.fecha_inicio,
-                    fecha_fin: fila.fecha_fin,
-                    estado: fila.estado
+        for (const presentacion of presentaciones) {
+            if (!mapa.has(presentacion.id_escenario)) {
+                mapa.set(presentacion.id_escenario, {
+                    id_escenario: presentacion.id_escenario,
+                    nombre_escenario: presentacion.nombre_escenario,
+                    presentaciones: [],
                 });
+            }
+            mapa.get(presentacion.id_escenario)!.presentaciones.push(presentacion);
+        }
 
-                return acc;
-            }, {})
-        );
+        return Array.from(mapa.values());
     }
 
     async crearPresentacion(data: CreatePresentacionDTO) {
@@ -91,5 +77,21 @@ export class PresentacionService {
             throw error;
         }
         return eliminada;
+    }
+
+    async cancelarPresentacion(id_presentacion: number, id_productor: number): Promise<void> {
+        if (!Number.isInteger(id_presentacion) || id_presentacion <= 0 || id_presentacion > 2147483647) {
+            const error: any = new Error('El ID de la presentación debe ser un entero positivo válido.');
+            error.status = 400;
+            throw error;
+        }
+
+        if (!Number.isInteger(id_productor) || id_productor <= 0 || id_productor > 2147483647) {
+            const error: any = new Error('El ID del productor debe ser un entero positivo válido.');
+            error.status = 400;
+            throw error;
+        }
+
+        await this.presentacionRepository.cancelar(id_presentacion, id_productor);
     }
 }
