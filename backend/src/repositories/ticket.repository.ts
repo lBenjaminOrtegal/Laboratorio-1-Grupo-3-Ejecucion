@@ -1,6 +1,7 @@
 import {pool} from '../config/db.js';
 import {
     Ticket,
+    ResultadoAccesoTicket,
     CreateTicketDTO,
     UpdateTicketDTO,
 } from '../interfaces/ticket.interface.js';
@@ -39,6 +40,41 @@ export class TicketRepository {
         return rows[0] || null;
     }
 
+    // La misma conexión mantiene la transacción y el bloqueo del ticket.
+    async registrarAcceso(codigo: string): Promise<ResultadoAccesoTicket> {
+        const client = await pool.connect(); // creamos un cliente para manejar la transacción 
+        try {
+            await client.query('BEGIN');
+            const {rows} = await client.query<Ticket>( 
+                'SELECT * FROM ticket WHERE codigo_unico = $1 FOR UPDATE', // for update bloquea la fila para que otros procesos no puedan modificarla hasta que se haga commit o rollback
+                [codigo],
+            );
+            const ticket = rows[0];
+            let resultado: ResultadoAccesoTicket; // variable cuyo valor va a mutar o reasignarse a lo largo de la ejecución del bloque try/catch.
+            if (!ticket) { 
+                resultado = {resultado: 'NO_ENCONTRADO'}; 
+            } else if (ticket.estado === 'ANULADO') {
+                resultado = {resultado: 'ANULADO'};
+            } else if (ticket.estado === 'UTILIZADO' || ticket.fecha_uso !== null) { // si existe fecha_uso, significa que el ticket ya fue utilizado
+                resultado = {resultado: 'UTILIZADO'}; 
+            } else {
+                const actualizado = await client.query<Ticket>(
+                    `UPDATE ticket SET estado = 'UTILIZADO', fecha_uso = CURRENT_TIMESTAMP
+                     WHERE codigo_unico = $1 RETURNING *`,
+                    [codigo],
+                );
+                resultado = {resultado: 'ACEPTADO', ticket: actualizado.rows[0]!};
+            }
+            await client.query('COMMIT'); // si todo salió bien, se hace commit de la transacción
+            return resultado;
+        } catch (error) {
+            await client.query('ROLLBACK'); // si hubo un error, se hace rollback de la transacción
+            throw error;
+        } finally {
+            client.release(); // se cierra la conexión
+        }
+    }
+
     // 3. CREATE (Crear un ticket)
     async create(data: CreateTicketDTO): Promise<Ticket> {
         const query = `
@@ -72,6 +108,8 @@ export class TicketRepository {
                 id_tipo_entrada = COALESCE($4, id_tipo_entrada)
             WHERE id_orden_compra = $5
               AND id = $6
+              AND estado = 'VALIDO'
+              AND fecha_uso IS NULL
             RETURNING *;
         `;
         const values = [

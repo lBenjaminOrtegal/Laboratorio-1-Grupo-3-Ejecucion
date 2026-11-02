@@ -4,6 +4,16 @@ import {TicketService} from '../services/ticket.service.js';
 const ticketService = new TicketService();
 
 export class TicketController {
+    // POST /api/tickets/validar: registrar un único ingreso por código.
+    async validarAcceso(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await ticketService.validarAcceso(req.body);
+            return res.status(200).json({mensaje: 'Acceso permitido.', data});
+        } catch (error) {
+            next(error);
+        }
+    }
+
     /*
         GET
         /api/tickets
