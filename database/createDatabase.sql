@@ -106,3 +106,12 @@ CREATE TABLE notificacion (
     fecha_envio TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE
 );
+
+
+-- Índices 
+-- Índice HASH en codigo_unico para acelerar la validación de accesos (búsqueda exacta O(1))
+CREATE INDEX idx_ticket_codigo_unico_hash ON ticket USING HASH (codigo_unico);
+
+-- Índices B-Tree en id_festival para acelerar los reportes de ventas y la grilla de presentaciones
+CREATE INDEX idx_tipo_entrada_id_festival ON tipo_entrada USING BTREE (id_festival);
+CREATE INDEX idx_escenario_id_festival ON escenario USING BTREE (id_festival);
