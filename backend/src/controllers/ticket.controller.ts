@@ -73,6 +73,31 @@ export class TicketController {
     }
 
     /*
+        POST
+        /api/tickets/comprar
+        Ejecuta la compra de uno o más tickets
+    */
+    async buy(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const idAsistente = req.user?.id ?? Number(req.body.id_asistente);
+
+            const tickets = await ticketService.comprarEntradas({
+                id_asistente: idAsistente,
+                id_tipo_entrada: Number(req.body.id_tipo_entrada),
+                cantidad: Number(req.body.cantidad),
+                metodo_pago: req.body.metodo_pago,
+            });
+
+            return res.status(201).json({
+                mensaje: 'Compra de entradas realizada con éxito.',
+                data: tickets,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /*
         PUT
         /api/tickets/:idOrdenCompra/:id
         Actualiza un ticket segun su clave compuesta (idOrdenCompra y id)

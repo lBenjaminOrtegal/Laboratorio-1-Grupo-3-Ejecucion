@@ -1,3 +1,95 @@
+-- Procedimiento almacenado 1: Comprar entradas: validar el cupo disponible del tipo de entrada,
+-- crear la orden, generar un ticket con código único por cada entrada y descontar el aforo
+-- en una sola transacción atómica.
+
+CREATE OR REPLACE PROCEDURE comprar_entradas(
+    p_id_asistente INTEGER,
+    p_id_tipo_entrada INTEGER,
+    p_cantidad INTEGER,
+    p_metodo_pago VARCHAR(50)
+)
+
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_usuario RECORD;
+    v_tipo_entrada RECORD;
+    v_monto_total NUMERIC(10, 0);
+	v_id_orden_generada INTEGER;
+    i INTEGER;
+BEGIN
+    -- Verificar que la cantidad de entradas sea válida
+    IF p_cantidad IS NULL OR p_cantidad <= 0 THEN
+        RAISE EXCEPTION 'La cantidad de entradas a comprar debe ser mayor a 0.';
+    END IF;
+
+    -- Verificar que el usuario exista, esté activo y tenga rol ASISTENTE
+    SELECT id, rol, activo
+    INTO v_usuario
+    FROM usuario
+    WHERE id = p_id_asistente;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'El usuario con ID % no existe.', p_id_asistente;
+    END IF;
+
+    IF NOT v_usuario.activo THEN
+        RAISE EXCEPTION 'El usuario con ID % se encuentra inactivo.', p_id_asistente;
+    END IF;
+
+    IF v_usuario.rol <> 'ASISTENTE' THEN
+        RAISE EXCEPTION 'Solo los usuarios con rol ASISTENTE pueden comprar entradas.';
+    END IF;
+
+    -- Verificar que el tipo de entrada exista, que el festival esté ACTIVO y bloquear la fila
+    SELECT te.id, te.precio, te.stock_disponible, f.estado AS estado_festival
+    INTO v_tipo_entrada
+    FROM tipo_entrada te
+    JOIN festival f ON te.id_festival = f.id
+    WHERE te.id = p_id_tipo_entrada
+    FOR UPDATE OF te;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'El tipo de entrada con ID % no existe.', p_id_tipo_entrada;
+    END IF;
+
+    IF v_tipo_entrada.estado_festival <> 'ACTIVO' THEN
+        RAISE EXCEPTION 'No se pueden comprar entradas para un festival que no está ACTIVO.';
+    END IF;
+
+    -- Validar el cupo disponible del tipo de entrada
+    IF v_tipo_entrada.stock_disponible < p_cantidad THEN
+        RAISE EXCEPTION 'No hay suficiente cupo disponible. Solicitado: %, Disponible: %.',
+            p_cantidad, v_tipo_entrada.stock_disponible;
+    END IF;
+
+    -- Calcular el monto total y crear la orden de compra en estado PAGADO
+    v_monto_total := v_tipo_entrada.precio * p_cantidad;
+
+    INSERT INTO orden_compra (fecha_compra, monto, metodo_pago, estado, id_asistente)
+    VALUES (CURRENT_TIMESTAMP, v_monto_total, p_metodo_pago, 'PAGADO', p_id_asistente)
+	RETURNING id INTO v_id_orden_generada;
+
+    -- Generar un ticket con código único por cada entrada comprada
+    FOR i IN 1..p_cantidad LOOP
+        INSERT INTO ticket (id, id_orden_compra, estado, codigo_unico, fecha_uso, id_tipo_entrada)
+        VALUES (
+            i,
+            v_id_orden_generada,
+            'VALIDO',
+            gen_random_uuid()::TEXT,
+            NULL,
+            p_id_tipo_entrada
+        );
+    END LOOP;
+
+    -- Descontar el aforo disponible en el tipo de entrada
+    UPDATE tipo_entrada
+    SET stock_disponible = stock_disponible - p_cantidad
+    WHERE id = p_id_tipo_entrada;
+END;
+$$;
+
 -- Procedimiento almacenado 2: Cancelar una presentación: marcarla como cancelada,
 -- generar notificaciones para todos los asistentes con entradas para ese día y asignarles
 -- un crédito de compensación.

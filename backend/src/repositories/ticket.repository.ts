@@ -4,6 +4,7 @@ import {
     ResultadoAccesoTicket,
     CreateTicketDTO,
     UpdateTicketDTO,
+    BuyTicketDTO,
 } from '../interfaces/ticket.interface.js';
 
 export class TicketRepository {
@@ -192,6 +193,46 @@ export class TicketRepository {
             ORDER BY t.id_orden_compra ASC, t.id ASC;
         `;
         const {rows} = await pool.query(query, [idUsuario]);
+        return rows;
+    }
+
+    /**
+     * Ejecuta el Procedimiento Almacenado 1 (comprar_entradas)
+     * - Valida stock, crea la orden, genera N tickets y descuenta aforo en BD
+     * - Retorna el ID de la orden generada junto con el listado de tickets emitidos
+     *
+     * @param data Datos de la compra (BuyTicketDTO)
+     * @returns Objeto con id_orden_compra, cantidad_tickets y el arreglo de tickets creados
+     */
+    async buy(data: BuyTicketDTO): Promise<any[]> {
+        const callQuery = `
+            CALL comprar_entradas($1, $2, $3, $4);
+        `;
+        const values = [
+            data.id_asistente,
+            data.id_tipo_entrada,
+            data.cantidad,
+            data.metodo_pago,
+        ];
+        await pool.query(callQuery, values);
+
+        const selectQuery = `
+            SELECT t.id,
+                   t.id_orden_compra,
+                   t.estado,
+                   t.codigo_unico,
+                   t.fecha_uso,
+                   t.id_tipo_entrada,
+                   te.nombre as tipo_entrada_nombre
+            FROM ticket t
+            INNER JOIN orden_compra oc ON t.id_orden_compra = oc.id
+            LEFT JOIN tipo_entrada te ON t.id_tipo_entrada = te.id
+            WHERE oc.id = (
+                SELECT MAX(id) FROM orden_compra WHERE id_asistente = $1
+            )
+            ORDER BY t.id ASC;
+        `;
+        const {rows} = await pool.query(selectQuery, [data.id_asistente]);
         return rows;
     }
 }

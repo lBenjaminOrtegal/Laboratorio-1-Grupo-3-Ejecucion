@@ -2,6 +2,7 @@ import {TicketRepository} from '../repositories/ticket.repository.js';
 import {
     CreateTicketDTO,
     UpdateTicketDTO,
+    BuyTicketDTO,
 } from '../interfaces/ticket.interface.js';
 
 export class TicketService {
@@ -135,5 +136,17 @@ export class TicketService {
     async obtenerTicketsDelUsuario(idUsuario: number) {
         const tickets = await this.ticketRepository.findByUsuario(idUsuario);
         return tickets;
+    }
+
+    /**
+     * Procesa la compra de entradas mediante el Procedimiento Almacenado 1
+     * - Valida que los campos requeridos vengan en la petición
+     * - Delega la ejecución transaccional al repositorio
+     *
+     * @param data Datos de la compra (BuyTicketDTO)
+     * @returns Array con los tickets generados en la orden de compra
+     */
+    async comprarEntradas(data: BuyTicketDTO) {
+        return await this.ticketRepository.buy(data);
     }
 }

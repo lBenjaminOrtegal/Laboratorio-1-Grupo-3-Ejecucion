@@ -8,6 +8,7 @@ const controller = new TicketController();
 
 // Ruta para que un ASISTENTE vea sus propios tickets
 router.get('/mis-tickets', authenticateJWT, authorizeRoles('ASISTENTE'), controller.getTicketsByUser);
+router.post('/comprar', authenticateJWT, authorizeRoles('ASISTENTE'), controller.buy);
 
 // Rutas autenticadas para PRODUCTOR.
 router.get('/', authenticateJWT, authorizeRoles('PRODUCTOR'), controller.getAll);

@@ -46,6 +46,17 @@ export interface UpdateTicketDTO {
 }
 
 /**
+ * DTO para compra de entradas
+ * Se usa para que un asistente pueda comprar uno o más tickets
+ */
+export interface BuyTicketDTO {
+    id_asistente: number;
+    id_tipo_entrada: number;
+    cantidad: number;
+    metodo_pago: 'TARJETA_CREDITO' | 'TARJETA_DEBITO';
+}
+
+/**
  * Resultado de validación de acceso a un ticket
  * - ACEPTADO: Ticket válido, fue marcado como UTILIZADO
  * - UTILIZADO: Ticket ya fue escaneado previamente (devuelve datos del ticket)
