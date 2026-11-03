@@ -81,4 +81,27 @@ export class OrdenCompraRepository {
         const {rows} = await pool.query(query, [id]);
         return rows[0] || null;
     }
+
+    /**
+     * Obtiene todas las órdenes de compra de un usuario específico (asistente)
+     * Ordenadas por fecha de compra descendente (más recientes primero)
+     * 
+     * @param idAsistente - ID del usuario (asistente)
+     * @returns Array de órdenes de compra del usuario
+     */
+    async findByAsistente(idAsistente: number): Promise<OrdenCompra[]> {
+        const query = `
+            SELECT oc.id,
+                   oc.fecha_compra,
+                   oc.monto,
+                   oc.metodo_pago,
+                   oc.estado,
+                   oc.id_asistente
+            FROM orden_compra oc
+            WHERE oc.id_asistente = $1
+            ORDER BY oc.fecha_compra DESC;
+        `;
+        const {rows} = await pool.query(query, [idAsistente]);
+        return rows;
+    }
 }

@@ -5,7 +5,7 @@ CREATE TABLE usuario (
     apellido VARCHAR(100) NOT NULL,
     correo VARCHAR(150) UNIQUE NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
-    credito_acumulado NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (credito_acumulado >= 0),
+    credito_acumulado NUMERIC(10, 0) NOT NULL DEFAULT 0 CHECK (credito_acumulado >= 0),
     rol VARCHAR(20) NOT NULL CHECK (rol IN ('PRODUCTOR', 'ASISTENTE')),
     activo BOOLEAN NOT NULL DEFAULT TRUE
 );
@@ -61,7 +61,7 @@ CREATE TABLE tipo_entrada (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
-    precio NUMERIC(10, 2) NOT NULL CHECK (precio >= 0),
+    precio NUMERIC(10, 0) NOT NULL CHECK (precio >= 0),
     stock_inicial INT NOT NULL CHECK (stock_inicial > 0),
     stock_disponible INT NOT NULL CHECK (stock_disponible >= 0 AND stock_disponible <= stock_inicial),
     fecha_acceso DATE NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE tipo_entrada (
 CREATE TABLE orden_compra (
     id SERIAL PRIMARY KEY,
     fecha_compra TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    monto NUMERIC(10, 2) NOT NULL CHECK (monto >= 0),
+    monto NUMERIC(10, 0) NOT NULL CHECK (monto >= 0),
     metodo_pago VARCHAR(50) NOT NULL CHECK (metodo_pago IN ('TARJETA_CREDITO', 'TARJETA_DEBITO')),
     estado VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE' CHECK (estado IN ('PENDIENTE', 'PAGADO', 'CANCELADO', 'FALLIDO', 'REEMBOLSADO')),
     id_asistente INT NOT NULL REFERENCES usuario(id) ON DELETE RESTRICT
@@ -93,8 +93,8 @@ CREATE TABLE ticket (
 CREATE TABLE auditoria (
     id SERIAL PRIMARY KEY,
     fecha_modificacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    precio_anterior NUMERIC(10, 2) NOT NULL,
-    precio_nuevo NUMERIC(10, 2) NOT NULL,
+    precio_anterior NUMERIC(10, 0) NOT NULL,
+    precio_nuevo NUMERIC(10, 0) NOT NULL,
     id_tipo_entrada INT NOT NULL REFERENCES tipo_entrada(id) ON DELETE CASCADE,
     id_productor INT NOT NULL REFERENCES usuario(id) ON DELETE RESTRICT
 );

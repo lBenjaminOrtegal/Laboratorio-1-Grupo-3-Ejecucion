@@ -67,4 +67,14 @@ export class OrdenCompraService {
 
         return {message: 'Orden de compra eliminada exitosamente.'};
     }
+
+    /**
+     * Obtiene todas las órdenes de compra de un usuario (asistente)
+     * 
+     * @param idAsistente - ID del usuario autenticado
+     * @returns Array de órdenes de compra del usuario
+     */
+    async obtenerOrdenesDelAsistente(idAsistente: number) {
+        return await this.ordenCompraRepository.findByAsistente(idAsistente);
+    }
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, Calendar, MapPin, ArrowRight, Filter, X, Loader, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -274,57 +274,6 @@ function Festivals() {
           </>
         )}
       </div>
-
-      {/* Empty State Tips */}
-      {!loading && festivals.length > 0 && (
-        <div className="bg-accent/5 border-t border-border py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-accent" />
-                    Filtrar por Estado
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Usa los filtros para encontrar festivales activos, finalizados o cancelados
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Search className="w-5 h-5 text-accent" />
-                    Buscar por Nombre
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Busca el nombre exacto del festival que deseas encontrar
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Loader className="w-5 h-5 text-accent" />
-                    Acceso Rápido
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Haz clic en cualquier festival activo para ver más detalles
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

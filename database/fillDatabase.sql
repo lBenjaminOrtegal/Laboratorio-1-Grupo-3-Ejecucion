@@ -20,12 +20,12 @@ RESTART IDENTITY CASCADE;
 -- 1. USUARIOS
 -- -------------------------------------------------------------------------
 INSERT INTO usuario (nombre, apellido, correo, contrasena, credito_acumulado, rol) VALUES
-('Carlos', 'Mendoza', 'carlos.productor@festivales.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0.00, 'PRODUCTOR'),
-('Javiera', 'Soto', 'javiera.productora@festivales.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0.00, 'PRODUCTOR'),
-('Matias', 'Rojas', 'matias.rojas@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 15000.00, 'ASISTENTE'),
-('Valentina', 'Diaz', 'valentina.diaz@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0.00, 'ASISTENTE'),
-('Diego', 'Fuentes', 'diego.fuentes@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 15000.00, 'ASISTENTE'),
-('Camila', 'Silva', 'camila.silva@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0.00, 'ASISTENTE');
+('Carlos', 'Mendoza', 'carlos.productor@festivales.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'PRODUCTOR'),
+('Javiera', 'Soto', 'javiera.productora@festivales.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'PRODUCTOR'),
+('Matias', 'Rojas', 'matias.rojas@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 15000, 'ASISTENTE'),
+('Valentina', 'Diaz', 'valentina.diaz@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'ASISTENTE'),
+('Diego', 'Fuentes', 'diego.fuentes@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 15000, 'ASISTENTE'),
+('Camila', 'Silva', 'camila.silva@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'ASISTENTE');
 
 -- -------------------------------------------------------------------------
 -- 2. RECINTOS
@@ -89,24 +89,24 @@ INSERT INTO presentacion (fecha_inicio, fecha_fin, estado, id_artista, id_escena
 -- 7. TIPOS DE ENTRADA
 -- -------------------------------------------------------------------------
 INSERT INTO tipo_entrada (nombre, descripcion, precio, stock_inicial, stock_disponible, fecha_acceso, id_festival) VALUES
-('Pase General Día 1', 'Acceso general a todos los escenarios el sábado 14 de noviembre', 65000.00, 100, 97, '2026-11-14', 1),
-('Pase VIP Día 1', 'Acceso a zona Lounge VIP y barra libre el sábado 14 de noviembre', 130000.00, 50, 48, '2026-11-14', 1),
-('Pase General Día 2', 'Acceso general a todos los escenarios el domingo 15 de noviembre', 65000.00, 100, 98, '2026-11-15', 1),
-('Entrada General Sur Rock', 'Acceso general al Estadio Ester Roa el sábado 5 de diciembre', 45000.00, 80, 79, '2026-12-05', 2);
+('Pase General Día 1', 'Acceso general a todos los escenarios el sábado 14 de noviembre', 65000, 100, 97, '2026-11-14', 1),
+('Pase VIP Día 1', 'Acceso a zona Lounge VIP y barra libre el sábado 14 de noviembre', 130000, 50, 48, '2026-11-14', 1),
+('Pase General Día 2', 'Acceso general a todos los escenarios el domingo 15 de noviembre', 65000, 100, 98, '2026-11-15', 1),
+('Entrada General Sur Rock', 'Acceso general al Estadio Ester Roa el sábado 5 de diciembre', 45000, 80, 79, '2026-12-05', 2);
 
 -- -------------------------------------------------------------------------
 -- 8. ÓRDENES DE COMPRA (DATOS DE PRUEBA)
 -- -------------------------------------------------------------------------
 INSERT INTO orden_compra (fecha_compra, monto, metodo_pago, estado, id_asistente) VALUES
 -- Órdenes exitosas estándar (PAGADO)
-('2026-10-10 14:20:00', 130000.00, 'TARJETA_CREDITO', 'PAGADO',      3), -- 1. Matías: 2 General Día 1
-('2026-10-11 10:15:00', 260000.00, 'TARJETA_DEBITO',  'PAGADO',      4), -- 2. Valentina: 2 VIP Día 1
-('2026-10-13 09:30:00', 130000.00, 'TARJETA_CREDITO', 'PAGADO',      6), -- 3. Camila: 2 General Día 2
-('2026-10-14 21:00:00',  45000.00, 'TARJETA_DEBITO',  'PAGADO',      3), -- 4. Matías: 1 Sur Rock
-('2026-10-15 08:30:00',  65000.00, 'TARJETA_DEBITO',   'PENDIENTE',   5), -- 5. Diego: Esperando comprobante
-('2026-10-16 12:10:00', 130000.00, 'TARJETA_CREDITO', 'FALLIDO',     5), -- 6. Diego: Error en la pasarela de pago
-('2026-10-16 16:45:00',  45000.00, 'TARJETA_DEBITO',  'CANCELADO',   6), -- 7. Camila: Carrito abandonado/anulado
-('2026-10-17 10:00:00', 260000.00, 'TARJETA_CREDITO', 'REEMBOLSADO', 4); -- 8. Valentina: Reembolso VIP procesado
+('2026-10-10 14:20:00', 130000, 'TARJETA_CREDITO', 'PAGADO',      3), -- 1. Matías: 2 General Día 1
+('2026-10-11 10:15:00', 260000, 'TARJETA_DEBITO',  'PAGADO',      4), -- 2. Valentina: 2 VIP Día 1
+('2026-10-13 09:30:00', 130000, 'TARJETA_CREDITO', 'PAGADO',      6), -- 3. Camila: 2 General Día 2
+('2026-10-14 21:00:00',  45000, 'TARJETA_DEBITO',  'PAGADO',      3), -- 4. Matías: 1 Sur Rock
+('2026-10-15 08:30:00',  65000, 'TARJETA_DEBITO',   'PENDIENTE',   5), -- 5. Diego: Esperando comprobante
+('2026-10-16 12:10:00', 130000, 'TARJETA_CREDITO', 'FALLIDO',     5), -- 6. Diego: Error en la pasarela de pago
+('2026-10-16 16:45:00',  45000, 'TARJETA_DEBITO',  'CANCELADO',   6), -- 7. Camila: Carrito abandonado/anulado
+('2026-10-17 10:00:00', 260000, 'TARJETA_CREDITO', 'REEMBOLSADO', 4); -- 8. Valentina: Reembolso VIP procesado
 
 -- -------------------------------------------------------------------------
 -- 9. TICKETS
@@ -134,8 +134,8 @@ INSERT INTO ticket (id, id_orden_compra, estado, codigo_unico, fecha_uso, id_tip
 -- 10. AUDITORÍA
 -- -------------------------------------------------------------------------
 INSERT INTO auditoria (fecha_modificacion, precio_anterior, precio_nuevo, id_tipo_entrada, id_productor) VALUES
-('2026-10-05 12:00:00', 55000.00, 65000.00, 1, 1),
-('2026-10-08 16:30:00', 115000.00, 130000.00, 2, 1);
+('2026-10-05 12:00:00', 55000, 65000, 1, 1),
+('2026-10-08 16:30:00', 115000, 130000, 2, 1);
 
 -- -------------------------------------------------------------------------
 -- 11. NOTIFICACIONES

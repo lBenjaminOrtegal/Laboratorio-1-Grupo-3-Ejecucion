@@ -40,38 +40,68 @@ export class TicketRepository {
         return rows[0] || null;
     }
 
-    // La misma conexión mantiene la transacción y el bloqueo del ticket.
+    /**
+     * Registra el acceso (validación) de un ticket
+     * - Busca ticket por código_unico
+     * - Usa transacción y bloqueo (FOR UPDATE) para evitar race conditions
+     * - Marca como UTILIZADO y asigna fecha_uso si es válido
+     * - Incluye nombre del tipo de entrada en la respuesta
+     * - Si ya fue utilizado, devuelve su información
+     * 
+     * @param codigo - Código único del ticket (max 64 caracteres)
+     * @returns ResultadoAccesoTicket con estado y datos del ticket si es válido
+     */
     async registrarAcceso(codigo: string): Promise<ResultadoAccesoTicket> {
-        const client = await pool.connect(); // creamos un cliente para manejar la transacción 
+        const client = await pool.connect();
         try {
             await client.query('BEGIN');
             const {rows} = await client.query<Ticket>( 
-                'SELECT * FROM ticket WHERE codigo_unico = $1 FOR UPDATE', // for update bloquea la fila para que otros procesos no puedan modificarla hasta que se haga commit o rollback
+                'SELECT * FROM ticket WHERE codigo_unico = $1 FOR UPDATE',
                 [codigo],
             );
             const ticket = rows[0];
-            let resultado: ResultadoAccesoTicket; // variable cuyo valor va a mutar o reasignarse a lo largo de la ejecución del bloque try/catch.
+            let resultado: ResultadoAccesoTicket;
+            
             if (!ticket) { 
                 resultado = {resultado: 'NO_ENCONTRADO'}; 
             } else if (ticket.estado === 'ANULADO') {
                 resultado = {resultado: 'ANULADO'};
-            } else if (ticket.estado === 'UTILIZADO' || ticket.fecha_uso !== null) { // si existe fecha_uso, significa que el ticket ya fue utilizado
-                resultado = {resultado: 'UTILIZADO'}; 
-            } else {
-                const actualizado = await client.query<Ticket>(
-                    `UPDATE ticket SET estado = 'UTILIZADO', fecha_uso = CURRENT_TIMESTAMP
-                     WHERE codigo_unico = $1 RETURNING *`,
+            } else if (ticket.estado === 'UTILIZADO') {
+                // Si estado es UTILIZADO, obtener datos enriquecidos del ticket
+                const enriquecido = await client.query<any>(
+                    `SELECT t.id, t.id_orden_compra, t.estado, t.codigo_unico, t.fecha_uso, t.id_tipo_entrada,
+                            te.nombre as tipo_entrada_nombre
+                     FROM ticket t
+                     LEFT JOIN tipo_entrada te ON t.id_tipo_entrada = te.id
+                     WHERE t.codigo_unico = $1`,
                     [codigo],
                 );
-                resultado = {resultado: 'ACEPTADO', ticket: actualizado.rows[0]!};
+                resultado = {resultado: 'UTILIZADO', ticket: enriquecido.rows[0]};
+            } else {
+                // ticket.estado === 'VALIDO'
+                await client.query(
+                    `UPDATE ticket SET estado = 'UTILIZADO', fecha_uso = CURRENT_TIMESTAMP
+                     WHERE codigo_unico = $1`,
+                    [codigo],
+                );
+                // Obtener el ticket actualizado con info enriquecida
+                const enriquecido = await client.query<any>(
+                    `SELECT t.id, t.id_orden_compra, t.estado, t.codigo_unico, t.fecha_uso, t.id_tipo_entrada,
+                            te.nombre as tipo_entrada_nombre
+                     FROM ticket t
+                     LEFT JOIN tipo_entrada te ON t.id_tipo_entrada = te.id
+                     WHERE t.codigo_unico = $1`,
+                    [codigo],
+                );
+                resultado = {resultado: 'ACEPTADO', ticket: enriquecido.rows[0]!};
             }
-            await client.query('COMMIT'); // si todo salió bien, se hace commit de la transacción
+            await client.query('COMMIT');
             return resultado;
         } catch (error) {
-            await client.query('ROLLBACK'); // si hubo un error, se hace rollback de la transacción
+            await client.query('ROLLBACK');
             throw error;
         } finally {
-            client.release(); // se cierra la conexión
+            client.release();
         }
     }
 
@@ -135,5 +165,33 @@ export class TicketRepository {
         `;
         const {rows} = await pool.query(query, [idOrdenCompra, id]);
         return rows[0] || null;
+    }
+
+    /**
+     * Obtiene todos los tickets de un usuario específico
+     * - Busca mediante orden_compra.id_asistente
+     * - Incluye nombre del tipo de entrada (JOIN con tipo_entrada)
+     * - Retorna tickets ordenados por orden_compra e id
+     * 
+     * @param idUsuario - ID del usuario (asistente)
+     * @returns Array de tickets del usuario con información enriquecida
+     */
+    async findByUsuario(idUsuario: number): Promise<any[]> {
+        const query = `
+            SELECT t.id,
+                   t.id_orden_compra,
+                   t.estado,
+                   t.codigo_unico,
+                   t.fecha_uso,
+                   t.id_tipo_entrada,
+                   te.nombre as tipo_entrada_nombre
+            FROM ticket t
+            INNER JOIN orden_compra oc ON t.id_orden_compra = oc.id
+            LEFT JOIN tipo_entrada te ON t.id_tipo_entrada = te.id
+            WHERE oc.id_asistente = $1
+            ORDER BY t.id_orden_compra ASC, t.id ASC;
+        `;
+        const {rows} = await pool.query(query, [idUsuario]);
+        return rows;
     }
 }

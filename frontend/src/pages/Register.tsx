@@ -154,7 +154,7 @@ function Register() {
         </div>
 
         {/* Form Card */}
-        <Card className='shadow-md'>
+        <Card className='shadow'>
           <CardHeader>
             <CardTitle>Registrarse</CardTitle>
             <CardDescription>

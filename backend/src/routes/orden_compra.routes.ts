@@ -6,8 +6,8 @@ import {authorizeRoles} from "../middlewares/rbac.middleware.js";
 const ordenCompraController = new OrdenCompraController();
 const ordenCompraRouter = Router();
 
-// Autenticadas
-// ordenCompraRouter.get('/propias', authenticateJWT, ordenCompraController.getByUser);
+// Ruta para que un ASISTENTE vea sus propias órdenes de compra
+ordenCompraRouter.get('/usuario/mis-ordenes', authenticateJWT, authorizeRoles('ASISTENTE'), ordenCompraController.getOrdenesDelAsistente);
 
 // Autenticadas y rol = PRODUCTOR
 ordenCompraRouter.get('/', authenticateJWT, authorizeRoles("PRODUCTOR"), ordenCompraController.getAll);

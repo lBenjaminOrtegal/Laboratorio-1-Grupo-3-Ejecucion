@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Menu, X, Music, Home, Ticket, LogOut, User, Plus, Pencil } from "lucide-react";
+import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,7 +21,7 @@ function NavBarComponent() {
 
   const navItems = [
     { path: "/", label: "Inicio", icon: Home },
-    { path: "/festivals", label: "Festivales", icon: Ticket },
+    { path: "/festivals", label: "Festivales", icon: HandMetalIcon },
     { path: "/line-up", label: "Line-Up", icon: Music },
   ];
 
@@ -102,6 +102,30 @@ function NavBarComponent() {
                       </DropdownMenuItem>
                     </Link>
                   )}
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/access-control" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Ticket className="w-4 h-4" />
+                        Control de Acceso
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  {user.rol === 'ASISTENTE' && (
+                    <Link to="/my-tickets" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Ticket className="w-4 h-4" />
+                        Mis Tickets
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  {user.rol === 'ASISTENTE' && (
+                    <Link to="/my-purchases" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <ShoppingCart className="w-4 h-4" />
+                        Mis Compras
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="gap-2 cursor-pointer text-destructive"
@@ -170,6 +194,40 @@ function NavBarComponent() {
                     <p className="font-semibold text-sm">{user.nombre} {user.apellido}</p>
                     <p className="text-xs text-muted-foreground">{user.correo}</p>
                   </div>
+
+                  {/* Role-specific mobile menu items */}
+                  {user.rol === 'PRODUCTOR' && (
+                    <>
+                      <Link to="/create-festival" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Plus className="w-4 h-4" />
+                          Crear Festival
+                        </Button>
+                      </Link>
+                      <Link to="/manage-festivals" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Pencil className="w-4 h-4" />
+                          Gestionar Festivales
+                        </Button>
+                      </Link>
+                      <Link to="/access-control" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Ticket className="w-4 h-4" />
+                          Control de Acceso
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+
+                  {user.rol === 'ASISTENTE' && (
+                    <Link to="/my-tickets" onClick={() => setIsMenuOpen(false)} className="block">
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <Ticket className="w-4 h-4" />
+                        Mis Tickets
+                      </Button>
+                    </Link>
+                  )}
+
                   <Button
                     variant="outline"
                     className="w-full justify-start gap-2"

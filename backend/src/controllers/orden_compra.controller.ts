@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from "express";
 import {OrdenCompraService} from "../services/orden_compra.service.js";
+import {AuthenticatedRequest} from "../interfaces/auth.interface.js";
 
 const ordenCompraService = new OrdenCompraService();
 
@@ -78,6 +79,26 @@ export class OrdenCompraController {
         try {
             const ordenCompraEliminada = await ordenCompraService.eliminarOrdenCompra(Number(req.params.id));
             return res.status(200).json(ordenCompraEliminada);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /*
+        GET
+        /api/ordenes-compra/usuario/mis-ordenes
+        Devuelve todas las órdenes de compra del usuario autenticado (asistente)
+    */
+    async getOrdenesDelAsistente(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const userId = req.user?.id;
+            if (!userId) {
+                const error: any = new Error('Usuario no autenticado.');
+                error.status = 401;
+                throw error;
+            }
+            const ordenes = await ordenCompraService.obtenerOrdenesDelAsistente(userId);
+            return res.status(200).json(ordenes);
         } catch (error) {
             next(error);
         }
