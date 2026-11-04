@@ -14,12 +14,12 @@ export class PresentacionRepository {
                    p.fecha_fin,
                    p.estado,
                    p.id_artista,
-                   a.nombre AS artista_nombre,
-                   a.genero AS artista_genero,
+                   a.nombre AS nombre_artista,
+                   a.genero AS genero_artista,
                    p.id_escenario,
-                   e.nombre AS escenario_nombre,
+                   e.nombre AS nombre_escenario,
                    e.id_festival,
-                   f.nombre AS festival_nombre
+                   f.nombre AS nombre_festival
             FROM presentacion p
                      JOIN artista a ON p.id_artista = a.id
                      JOIN escenario e ON p.id_escenario = e.id
@@ -38,12 +38,12 @@ export class PresentacionRepository {
                    p.fecha_fin,
                    p.estado,
                    p.id_artista,
-                   a.nombre AS artista_nombre,
-                   a.genero AS artista_genero,
+                   a.nombre AS nombre_artista,
+                   a.genero AS genero_artista,
                    p.id_escenario,
-                   e.nombre AS escenario_nombre,
+                   e.nombre AS nombre_escenario,
                    e.id_festival,
-                   f.nombre AS festival_nombre
+                   f.nombre AS nombre_festival
             FROM presentacion p
                      JOIN artista a ON p.id_artista = a.id
                      JOIN escenario e ON p.id_escenario = e.id

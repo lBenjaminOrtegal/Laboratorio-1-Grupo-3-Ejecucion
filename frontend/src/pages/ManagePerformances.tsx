@@ -449,7 +449,7 @@ function ManagePresentaciones() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <CardTitle className="text-xl mb-1">
-                            {presentacion.artista_nombre}
+                            {presentacion.nombre_artista}
                           </CardTitle>
                           <div className="flex items-center gap-4 flex-wrap">
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -458,7 +458,7 @@ function ManagePresentaciones() {
                             </div>
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <MapPin className="w-4 h-4" />
-                              {presentacion.escenario_nombre}
+                              {presentacion.nombre_escenario}
                             </div>
                           </div>
                         </div>
@@ -476,11 +476,11 @@ function ManagePresentaciones() {
                       <div className="space-y-2 text-sm text-muted-foreground mb-4">
                         <p>
                           <span className="font-semibold">Género:</span>{" "}
-                          {presentacion.artista_genero}
+                          {presentacion.genero_artista}
                         </p>
                         <p>
                           <span className="font-semibold">Festival:</span>{" "}
-                          {presentacion.festival_nombre}
+                          {presentacion.nombre_festival}
                         </p>
                         <p className="flex items-center gap-2">
                           <Clock className="w-4 h-4" />

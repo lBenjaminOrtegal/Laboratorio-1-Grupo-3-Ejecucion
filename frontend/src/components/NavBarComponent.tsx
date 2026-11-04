@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart, Mic2, Bell, BadgeDollarSign, ChartNoAxesColumn, ChartNoAxesColumnIncreasing } from "lucide-react";
+import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart, Mic2, Bell, BadgeDollarSign, ChartNoAxesColumnIncreasing, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -149,7 +149,12 @@ function NavBarComponent() {
                       <DropdownMenuContent align="end" className="w-96 max-h-96 overflow-y-auto py-3">
                         <DropdownMenuLabel>Notificaciones ({notificaciones.length})</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        {notificaciones.length === 0 ? (
+                        {loadingNotificaciones ? (
+                          <div className="p-4 text-center flex items-center justify-center gap-2 text-muted-foreground">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span className="text-sm">Cargando notificaciones...</span>
+                          </div>
+                        ) : notificaciones.length === 0 ? (
                           <div className="p-4 text-center text-muted-foreground text-sm">
                             No hay notificaciones
                           </div>

@@ -1,22 +1,20 @@
-FROM node:20-alpine AS build
-
+FROM node:lts-alpine AS build-stage
 WORKDIR /app
-
 COPY package*.json ./
-COPY tsconfig.json tsconfig.app.json tsconfig.node.json vite.config.ts tailwind.config.ts postcss.config.js eslint.config.js index.html ./
+RUN npm ci
+COPY . .
 
-RUN npm install
+ARG VITE_BACKEND_SERVER=backend
+ARG VITE_BACKEND_PORT=3000
 
-COPY src ./src
-COPY public ./public
+ENV VITE_BACKEND_SERVER=${VITE_BACKEND_SERVER}
+ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT}
 
 RUN npm run build
 
 FROM nginx:alpine
-
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/dist /usr/share/nginx/html
-
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]

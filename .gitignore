@@ -30,3 +30,5 @@ frontend/*.log
 frontend/logs/
 **/node_modules/
 backend/.env.example
+
+stats.py
