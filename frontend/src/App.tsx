@@ -7,7 +7,7 @@ import Festivals from "./pages/Festivals.tsx";
 import FestivalDetail from "./pages/FestivalDetail.tsx";
 import CreateFestival from "./pages/CreateFestival.tsx";
 import CreatePerformance from "./pages/CreatePerformance.tsx";
-import ManageFestivals from "./pages/ManageFestivals.tsx";
+import ProducerPanel from "./pages/ProducerPanel.tsx";
 import ManagePerformances from "./pages/ManagePerformances.tsx";
 import AccessControl from "./pages/AccessControl.tsx";
 import MyTickets from "./pages/MyTickets.tsx";
@@ -31,7 +31,7 @@ function App() {
                         <Route path="/festivals" element={<Festivals/>}/>
                         <Route path="/create-festival" element={<ProtectedRoute element={<CreateFestival/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/create-performance" element={<ProtectedRoute element={<CreatePerformance/>} requiredRole="PRODUCTOR" />}/>
-                        <Route path="/manage-festivals" element={<ProtectedRoute element={<ManageFestivals/>} requiredRole="PRODUCTOR" />}/>
+                        <Route path="/manage-festivals" element={<ProtectedRoute element={<ProducerPanel/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/festivals/:id" element={<FestivalDetail/>}/>
                         <Route path="/manage-performances" element={<ProtectedRoute element={<ManagePerformances/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/access-control" element={<ProtectedRoute element={<AccessControl/>} requiredRole="PRODUCTOR" />}/>

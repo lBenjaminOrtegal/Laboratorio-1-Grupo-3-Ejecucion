@@ -98,7 +98,7 @@ function NavBarComponent() {
                     <Link to="/manage-festivals" className="w-full">
                       <DropdownMenuItem className="gap-2 cursor-pointer">
                         <Pencil className="w-4 h-4" />
-                        Gestionar Festivales
+                        Panel
                       </DropdownMenuItem>
                     </Link>
                   )}
