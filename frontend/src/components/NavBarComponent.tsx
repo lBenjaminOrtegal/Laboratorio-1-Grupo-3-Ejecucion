@@ -22,7 +22,6 @@ function NavBarComponent() {
   const navItems = [
     { path: "/", label: "Inicio", icon: Home },
     { path: "/festivals", label: "Festivales", icon: HandMetalIcon },
-    { path: "/line-up", label: "Line-Up", icon: Music },
   ];
 
   const handleLogout = () => {

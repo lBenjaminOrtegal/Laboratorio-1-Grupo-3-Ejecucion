@@ -1,0 +1,58 @@
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: bd-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 3713
+      POSTGRES_DB: sgfm
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/createDatabase.sql:/docker-entrypoint-initdb.d/01-createDatabase.sql
+      - ./database/fillDatabase.sql:/docker-entrypoint-initdb.d/02-fillDatabase.sql
+      - ./database/statements.sql:/docker-entrypoint-initdb.d/03-statements.sql
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      PORT: 3000
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 3713
+      DB_NAME: sgfm
+      JWT_SECRET: keyjwtcedo
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
