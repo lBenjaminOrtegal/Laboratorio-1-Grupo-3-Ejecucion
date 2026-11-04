@@ -82,13 +82,7 @@ export class OrdenCompraRepository {
         return rows[0] || null;
     }
 
-    /**
-     * Obtiene todas las órdenes de compra de un usuario específico (asistente)
-     * Ordenadas por fecha de compra descendente (más recientes primero)
-     * 
-     * @param idAsistente - ID del usuario (asistente)
-     * @returns Array de órdenes de compra del usuario
-     */
+    // Obtiene todas las órdenes de compra de un usuario específico (asistente)
     async findByAsistente(idAsistente: number): Promise<OrdenCompra[]> {
         const query = `
             SELECT oc.id,
