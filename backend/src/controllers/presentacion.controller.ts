@@ -130,12 +130,14 @@ export class PresentacionController {
                 });
             }
 
-            const id_presentacion = Number(req.params.id);
-            const id_productor = req.user.id;
-            
-            return res.status(200).json({
-                mensaje: 'Presentación cancelada correctamente.',
-            });
+        const id_presentacion = Number(req.params.id);
+        const id_productor = req.user.id;
+
+        await presentacionService.cancelarPresentacion(id_presentacion, id_productor);
+
+        return res.status(200).json({
+            mensaje: 'Presentación cancelada correctamente.',
+        });
         } catch (error) {
             next(error);
         }
