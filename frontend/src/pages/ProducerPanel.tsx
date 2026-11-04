@@ -16,6 +16,7 @@ import {
   Building2,
   Mic2,
   Users,
+  Ticket as TicketIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,11 +32,13 @@ import festivalService from '@/services/festival.service';
 import recintoService from '@/services/recinto.service';
 import artistaService from '@/services/artista.service';
 import escenarioService from '@/services/escenario.service';
+import tipoEntradaService from '@/services/tipo_entrada.service';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Festival, UpdateFestivalDTO, EstadoFestival } from '@/interfaces/festival.interface';
 import type { Recinto } from '@/interfaces/recinto.interface';
 import type { Artista } from '@/interfaces/artista.interface';
 import type { Escenario } from '@/interfaces/escenario.interface';
+import type { TipoEntrada } from '@/interfaces/tipo_entrada.interface';
 import { getStatusColor } from '@/utils/formatUtils';
 
 type ActiveTab = 'FESTIVALES' | 'RECINTOS' | 'ARTISTAS';
@@ -62,9 +65,33 @@ function ProducerPanel() {
   const [editingEscenarioId, setEditingEscenarioId] = useState<number | null>(null);
   const [editEscenarioData, setEditEscenarioData] = useState({ nombre: '', capacidad: '' });
 
+  // Estados de Tipos de Entrada (dentro de cada festival)
+  const [tiposEntrada, setTiposEntrada] = useState<TipoEntrada[]>([]);
+  const [openTicketsFestivalId, setOpenTicketsFestivalId] = useState<number | null>(null);
+  const [newTipoEntrada, setNewTipoEntrada] = useState({
+    nombre: '',
+    descripcion: '',
+    precio: '',
+    stock: '',
+    fecha_acceso: '',
+  });
+  const [editingTipoId, setEditingTipoId] = useState<number | null>(null);
+  const [editTipoData, setEditTipoData] = useState({
+    nombre: '',
+    descripcion: '',
+    precio: '',
+    stock_disponible: '',
+    fecha_acceso: '',
+  });
+
   // Estados de Recintos
   const [recintos, setRecintos] = useState<Recinto[]>([]);
-  const [newRecinto, setNewRecinto] = useState({ nombre: '', direccion: '', ciudad: '', capacidad: '' });
+  const [newRecinto, setNewRecinto] = useState({
+    nombre: '',
+    direccion: '',
+    ciudad: '',
+    capacidad: '',
+  });
   const [editingRecintoId, setEditingRecintoId] = useState<number | null>(null);
   const [editRecintoData, setEditRecintoData] = useState({
     nombre: '',
@@ -115,6 +142,16 @@ function ProducerPanel() {
     }
   };
 
+  const loadTiposEntrada = async () => {
+    try {
+      const res = await tipoEntradaService.getAll();
+      const list: TipoEntrada[] = Array.isArray(res.data) ? res.data : res.data?.data || [];
+      setTiposEntrada(list);
+    } catch (err) {
+      console.error('Error al cargar tipos de entrada:', err);
+    }
+  };
+
   const loadRecintos = async () => {
     try {
       const res = await recintoService.getAll();
@@ -138,6 +175,7 @@ function ProducerPanel() {
   useEffect(() => {
     loadFestivals();
     loadEscenarios();
+    loadTiposEntrada();
     loadRecintos();
     loadArtistas();
   }, [user?.id]);
@@ -268,6 +306,76 @@ function ProducerPanel() {
     }
   };
 
+  // ==================== CRUD TIPOS DE ENTRADA ====================
+  const handleCreateTipoEntrada = async (e: React.FormEvent, festivalId: number) => {
+    e.preventDefault();
+    try {
+      setError(null);
+      const stockNum = Number(newTipoEntrada.stock);
+      await tipoEntradaService.create({
+        nombre: newTipoEntrada.nombre.trim(),
+        descripcion: newTipoEntrada.descripcion.trim(),
+        precio: Number(newTipoEntrada.precio),
+        stock_inicial: stockNum,
+        stock_disponible: stockNum,
+        fecha_acceso: newTipoEntrada.fecha_acceso,
+        id_festival: festivalId,
+      });
+      setNewTipoEntrada({
+        nombre: '',
+        descripcion: '',
+        precio: '',
+        stock: '',
+        fecha_acceso: '',
+      });
+      showSuccess('Tipo de entrada agregado al festival');
+      loadTiposEntrada();
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          'Error al crear el tipo de entrada'
+      );
+    }
+  };
+
+  const handleUpdateTipoEntrada = async (id: number) => {
+    try {
+      setError(null);
+      await tipoEntradaService.update(id, {
+        nombre: editTipoData.nombre.trim(),
+        descripcion: editTipoData.descripcion.trim(),
+        precio: Number(editTipoData.precio),
+        stock_disponible: Number(editTipoData.stock_disponible),
+        fecha_acceso: editTipoData.fecha_acceso,
+      });
+      setEditingTipoId(null);
+      showSuccess('Tipo de entrada actualizado');
+      loadTiposEntrada();
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          'Error al actualizar tipo de entrada'
+      );
+    }
+  };
+
+  const handleDeleteTipoEntrada = async (id: number) => {
+    if (!confirm('¿Eliminar este tipo de entrada?')) return;
+    try {
+      setError(null);
+      await tipoEntradaService.deleteById(id);
+      showSuccess('Tipo de entrada eliminado');
+      loadTiposEntrada();
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          'No se puede eliminar un tipo de entrada que ya tiene tickets vendidos'
+      );
+    }
+  };
+
   // ==================== CRUD RECINTOS ====================
   const handleCreateRecinto = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -386,7 +494,7 @@ function ProducerPanel() {
                 Panel de Productor
               </h1>
               <p className="text-muted-foreground mt-1">
-                Administra tus festivales, escenarios, recintos y catálogo de artistas
+                Administra tus festivales, escenarios, entradas, recintos y catálogo de artistas
               </p>
             </div>
             <Button
@@ -412,7 +520,7 @@ function ProducerPanel() {
               }}
             >
               <Music className="w-4 h-4" />
-              Mis Festivales y Escenarios ({festivals.length})
+              Mis Festivales ({festivals.length})
             </Button>
             <Button
               variant={activeTab === 'RECINTOS' ? 'default' : 'outline'}
@@ -458,7 +566,7 @@ function ProducerPanel() {
           </div>
         )}
 
-        {/* ==================== TAB 1: FESTIVALES Y ESCENARIOS ==================== */}
+        {/* ==================== TAB 1: FESTIVALES, ESCENARIOS Y ENTRADAS ==================== */}
         {activeTab === 'FESTIVALES' && (
           <>
             {loading && !editingId ? (
@@ -484,7 +592,11 @@ function ProducerPanel() {
                   const festEscenarios = escenarios.filter(
                     (e) => Number(e.id_festival) === Number(festival.id)
                   );
+                  const festTiposEntrada = tiposEntrada.filter(
+                    (t) => Number(t.id_festival) === Number(festival.id)
+                  );
                   const isStagesOpen = openStagesFestivalId === festival.id;
+                  const isTicketsOpen = openTicketsFestivalId === festival.id;
 
                   return (
                     <Card key={festival.id} className="overflow-hidden">
@@ -604,13 +716,27 @@ function ProducerPanel() {
                               <Button
                                 variant={isStagesOpen ? 'default' : 'outline'}
                                 size="sm"
-                                onClick={() =>
-                                  setOpenStagesFestivalId(isStagesOpen ? null : festival.id)
-                                }
+                                onClick={() => {
+                                  setOpenStagesFestivalId(isStagesOpen ? null : festival.id);
+                                  setOpenTicketsFestivalId(null);
+                                }}
                                 className="gap-2"
                               >
                                 <Mic2 className="w-4 h-4" />
                                 Escenarios ({festEscenarios.length})
+                              </Button>
+
+                              <Button
+                                variant={isTicketsOpen ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => {
+                                  setOpenTicketsFestivalId(isTicketsOpen ? null : festival.id);
+                                  setOpenStagesFestivalId(null);
+                                }}
+                                className="gap-2"
+                              >
+                                <TicketIcon className="w-4 h-4" />
+                                Entradas ({festTiposEntrada.length})
                               </Button>
 
                               {festival.estado === 'ACTIVO' && (
@@ -657,7 +783,6 @@ function ProducerPanel() {
                                   Escenarios de {festival.nombre}
                                 </h4>
 
-                                {/* Formulario Crear Escenario */}
                                 <form
                                   onSubmit={(e) => handleCreateEscenario(e, festival.id)}
                                   className="flex flex-col sm:flex-row gap-2"
@@ -690,7 +815,6 @@ function ProducerPanel() {
                                   </Button>
                                 </form>
 
-                                {/* Lista de Escenarios */}
                                 {festEscenarios.length === 0 ? (
                                   <p className="text-xs text-muted-foreground">
                                     No hay escenarios registrados para este festival.
@@ -765,6 +889,233 @@ function ProducerPanel() {
                                                 variant="ghost"
                                                 className="text-red-600"
                                                 onClick={() => handleDeleteEscenario(esc.id)}
+                                              >
+                                                <Trash2 className="w-4 h-4" />
+                                              </Button>
+                                            </div>
+                                          </>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Panel desplegable de Tipos de Entrada del Festival */}
+                            {isTicketsOpen && (
+                              <div className="mt-4 pt-4 border-t border-border bg-muted/30 rounded-lg p-4 space-y-4">
+                                <h4 className="font-semibold text-sm flex items-center gap-2">
+                                  <TicketIcon className="w-4 h-4 text-accent" />
+                                  Tipos de Entrada de {festival.nombre}
+                                </h4>
+
+                                {/* Formulario Crear Tipo de Entrada */}
+                                <form
+                                  onSubmit={(e) => handleCreateTipoEntrada(e, festival.id)}
+                                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2"
+                                >
+                                  <Input
+                                    placeholder="Nombre (ej: Pase VIP Día 1)"
+                                    className="lg:col-span-1"
+                                    value={newTipoEntrada.nombre}
+                                    onChange={(e) =>
+                                      setNewTipoEntrada({
+                                        ...newTipoEntrada,
+                                        nombre: e.target.value,
+                                      })
+                                    }
+                                    required
+                                  />
+                                  <Input
+                                    placeholder="Descripción"
+                                    className="lg:col-span-2"
+                                    value={newTipoEntrada.descripcion}
+                                    onChange={(e) =>
+                                      setNewTipoEntrada({
+                                        ...newTipoEntrada,
+                                        descripcion: e.target.value,
+                                      })
+                                    }
+                                    required
+                                  />
+                                  <Input
+                                    type="number"
+                                    min={0}
+                                    placeholder="Precio CLP"
+                                    value={newTipoEntrada.precio}
+                                    onChange={(e) =>
+                                      setNewTipoEntrada({
+                                        ...newTipoEntrada,
+                                        precio: e.target.value,
+                                      })
+                                    }
+                                    required
+                                  />
+                                  <Input
+                                    type="number"
+                                    min={1}
+                                    placeholder="Stock Inicial"
+                                    value={newTipoEntrada.stock}
+                                    onChange={(e) =>
+                                      setNewTipoEntrada({
+                                        ...newTipoEntrada,
+                                        stock: e.target.value,
+                                      })
+                                    }
+                                    required
+                                  />
+                                  <div className="flex gap-2">
+                                    <Input
+                                      type="date"
+                                      value={newTipoEntrada.fecha_acceso}
+                                      onChange={(e) =>
+                                        setNewTipoEntrada({
+                                          ...newTipoEntrada,
+                                          fecha_acceso: e.target.value,
+                                        })
+                                      }
+                                      required
+                                    />
+                                    <Button type="submit" size="sm" className="gap-1 flex-shrink-0">
+                                      <Plus className="w-4 h-4" />
+                                      Agregar
+                                    </Button>
+                                  </div>
+                                </form>
+
+                                {/* Lista de Tipos de Entrada */}
+                                {festTiposEntrada.length === 0 ? (
+                                  <p className="text-xs text-muted-foreground">
+                                    No hay tipos de entrada configurados para este festival.
+                                  </p>
+                                ) : (
+                                  <div className="space-y-2">
+                                    {festTiposEntrada.map((tipo) => (
+                                      <div
+                                        key={tipo.id}
+                                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-background p-3 rounded border border-border text-sm"
+                                      >
+                                        {editingTipoId === tipo.id ? (
+                                          <div className="flex flex-wrap flex-1 gap-2">
+                                            <Input
+                                              placeholder="Nombre"
+                                              className="w-40"
+                                              value={editTipoData.nombre}
+                                              onChange={(e) =>
+                                                setEditTipoData({
+                                                  ...editTipoData,
+                                                  nombre: e.target.value,
+                                                })
+                                              }
+                                            />
+                                            <Input
+                                              placeholder="Descripción"
+                                              className="flex-1 min-w-[160px]"
+                                              value={editTipoData.descripcion}
+                                              onChange={(e) =>
+                                                setEditTipoData({
+                                                  ...editTipoData,
+                                                  descripcion: e.target.value,
+                                                })
+                                              }
+                                            />
+                                            <Input
+                                              type="number"
+                                              placeholder="Precio"
+                                              className="w-28"
+                                              value={editTipoData.precio}
+                                              onChange={(e) =>
+                                                setEditTipoData({
+                                                  ...editTipoData,
+                                                  precio: e.target.value,
+                                                })
+                                              }
+                                            />
+                                            <Input
+                                              type="number"
+                                              placeholder="Stock Disp."
+                                              className="w-24"
+                                              value={editTipoData.stock_disponible}
+                                              onChange={(e) =>
+                                                setEditTipoData({
+                                                  ...editTipoData,
+                                                  stock_disponible: e.target.value,
+                                                })
+                                              }
+                                            />
+                                            <Input
+                                              type="date"
+                                              className="w-36"
+                                              value={editTipoData.fecha_acceso}
+                                              onChange={(e) =>
+                                                setEditTipoData({
+                                                  ...editTipoData,
+                                                  fecha_acceso: e.target.value,
+                                                })
+                                              }
+                                            />
+                                            <Button
+                                              size="sm"
+                                              onClick={() => handleUpdateTipoEntrada(tipo.id)}
+                                            >
+                                              Guardar
+                                            </Button>
+                                            <Button
+                                              size="sm"
+                                              variant="ghost"
+                                              onClick={() => setEditingTipoId(null)}
+                                            >
+                                              Cancelar
+                                            </Button>
+                                          </div>
+                                        ) : (
+                                          <>
+                                            <div className="space-y-0.5">
+                                              <div className="flex items-center gap-2">
+                                                <span className="font-semibold text-foreground">
+                                                  {tipo.nombre}
+                                                </span>
+                                                <span className="text-xs font-bold text-accent">
+                                                  ${Number(tipo.precio).toLocaleString('es-CL')}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground">
+                                                  • Stock: {tipo.stock_disponible} /{' '}
+                                                  {tipo.stock_inicial}
+                                                </span>
+                                              </div>
+                                              {tipo.descripcion && (
+                                                <p className="text-xs text-muted-foreground">
+                                                  {tipo.descripcion}
+                                                </p>
+                                              )}
+                                            </div>
+                                            <div className="flex gap-1 self-end sm:self-center">
+                                              <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={() => {
+                                                  setEditingTipoId(tipo.id);
+                                                  setEditTipoData({
+                                                    nombre: tipo.nombre,
+                                                    descripcion: tipo.descripcion || '',
+                                                    precio: String(tipo.precio),
+                                                    stock_disponible: String(
+                                                      tipo.stock_disponible
+                                                    ),
+                                                    fecha_acceso: tipo.fecha_acceso
+                                                      ? tipo.fecha_acceso.split('T')[0]
+                                                      : '',
+                                                  });
+                                                }}
+                                              >
+                                                <Edit className="w-4 h-4" />
+                                              </Button>
+                                              <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                className="text-red-600"
+                                                onClick={() => handleDeleteTipoEntrada(tipo.id)}
                                               >
                                                 <Trash2 className="w-4 h-4" />
                                               </Button>
