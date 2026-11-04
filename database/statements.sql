@@ -178,3 +178,79 @@ BEGIN
     WHERE id = id_presentacion;
 END;
 $$;
+
+-- 1. Función para el Trigger de Auditoría
+CREATE OR REPLACE FUNCTION fn_auditar_cambio_precio()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_id_productor INT;
+BEGIN
+    -- Comparamos si el precio cambió efectivamente
+    IF OLD.precio IS DISTINCT FROM NEW.precio THEN
+
+        -- Intentamos obtener el ID del productor desde una variable de sesión,
+        -- o puedes asignarlo según tu lógica de autenticación actual.
+        BEGIN
+            v_id_productor := current_setting('app.current_user_id', true)::INT;
+        EXCEPTION WHEN OTHERS THEN
+            v_id_productor := NULL; -- Manejo por si no está configurada la sesión en el momento
+        END;
+
+        -- Si no hay sesión configurada, puedes asegurar un id por defecto o validar
+        IF v_id_productor IS NULL THEN
+            RAISE EXCEPTION 'Se requiere un ID de productor válido en la sesión para auditar el cambio de precio.';
+        END IF;
+
+        -- Insertamos el registro en la tabla auditoria
+        INSERT INTO auditoria (
+            precio_anterior,
+            precio_nuevo,
+            id_tipo_entrada,
+            id_productor
+        )
+        VALUES (
+            OLD.precio,
+            NEW.precio,
+            OLD.id,
+            v_id_productor
+        );
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 2. Creación del Trigger en la tabla tipo_entrada
+DROP TRIGGER IF EXISTS trg_auditar_precio_tipo_entrada ON tipo_entrada;
+
+CREATE TRIGGER trg_auditar_precio_tipo_entrada
+AFTER UPDATE ON tipo_entrada
+For EACH ROW
+EXECUTE FUNCTION fn_auditar_cambio_precio();
+
+-- Vista Materializada: Ventas y ocupación por Festival y Tipo de entrada
+CREATE MATERIALIZED VIEW mv_ventas_ocupacion_festival AS
+SELECT
+    f.id AS id_festival,
+    f.nombre AS nombre_festival,
+    te.id AS id_tipo_entrada,
+    te.nombre AS nombre_tipo_entrada,
+    te.stock_inicial,
+    te.stock_disponible,
+    -- Contamos solo los tickets asociados a órdenes de compra que estén pagadas
+    COUNT(t.id) AS tickets_vendidos,
+    -- Porcentaje de aforo vendido en base al stock inicial
+    CASE
+        WHEN te.stock_inicial > 0 THEN
+            ROUND((COUNT(t.id)::NUMERIC / te.stock_inicial) * 100, 2)
+        ELSE 0.00
+    END AS porcentaje_aforo_vendido,
+    (COUNT(t.id) * te.precio) AS recaudacion_total
+FROM festival f
+JOIN tipo_entrada te ON f.id = te.id_festival
+LEFT JOIN ticket t ON te.id = t.id_tipo_entrada
+LEFT JOIN orden_compra oc ON t.id_orden_compra = oc.id AND oc.estado = 'PAGADO'
+GROUP BY f.id, f.nombre, te.id, te.nombre, te.stock_inicial, te.stock_disponible, te.precio;
+
+CREATE UNIQUE INDEX idx_mv_ventas_ocupacion_uk
+ON mv_ventas_ocupacion_festival (id_festival, id_tipo_entrada);
