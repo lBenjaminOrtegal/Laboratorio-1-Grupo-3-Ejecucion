@@ -104,8 +104,8 @@ AS $$
 DECLARE
     v_presentacion RECORD;
     v_asistente RECORD;
-    v_credito_por_ticket CONSTANT NUMERIC(10, 2) := 15000.00; -- Credito de compensación por ticket
-    v_compensacion_total NUMERIC(10, 2);
+    v_credito_por_ticket CONSTANT NUMERIC(10, 0) := 15000; -- Credito de compensación por ticket
+    v_compensacion_total NUMERIC(10, 0);
 BEGIN
     -- Verificar si la presentación existe
     SELECT p.estado, p.fecha_inicio::DATE as fecha, e.id_festival, a.nombre as nombre_artista, f.id_productor AS productor_festival
@@ -179,7 +179,62 @@ BEGIN
 END;
 $$;
 
--- 1. Función para el Trigger de Auditoría
+-- Trigger 1: Impedir programar una presentación que se superponga en horario con otra
+-- en el mismo escenario, o que un mismo artista tenga dos presentaciones simultáneas.
+BEGIN;
+
+CREATE OR REPLACE FUNCTION validar_solapamiento_presentacion()
+RETURNS TRIGGER
+LANGUAGE plpgsql -- plpgsql permite control de flujo, excepciones y transacciones
+AS $$
+BEGIN
+    -- Serializar las programaciones del mismo artista o escenario. Los bloqueos
+    -- duran hasta COMMIT/ROLLBACK; la aplicación utiliza READ COMMITTED.
+    PERFORM id FROM artista WHERE id = NEW.id_artista FOR UPDATE;
+    PERFORM id FROM escenario WHERE id = NEW.id_escenario FOR UPDATE;
+
+    -- Una presentación cancelada no ocupa horario.
+    IF NEW.estado = 'CANCELADA' THEN
+        RETURN NEW;
+    END IF;
+    
+    IF EXISTS (
+        SELECT 1 FROM presentacion p
+        WHERE p.id IS DISTINCT FROM NEW.id
+          AND p.estado <> 'CANCELADA'
+          AND p.id_escenario = NEW.id_escenario
+          AND NEW.fecha_inicio < p.fecha_fin
+          AND NEW.fecha_fin > p.fecha_inicio
+    ) THEN
+        RAISE EXCEPTION 'El escenario ya tiene una presentación en ese horario.';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM presentacion p
+        WHERE p.id IS DISTINCT FROM NEW.id
+          AND p.estado <> 'CANCELADA'
+          AND p.id_artista = NEW.id_artista
+          AND NEW.fecha_inicio < p.fecha_fin
+          AND NEW.fecha_fin > p.fecha_inicio
+    ) THEN
+        RAISE EXCEPTION 'El artista ya tiene una presentación en ese horario.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_solapamiento_presentacion ON presentacion;
+CREATE TRIGGER trg_solapamiento_presentacion
+BEFORE INSERT OR UPDATE OF fecha_inicio, fecha_fin, id_artista, id_escenario, estado
+ON presentacion
+FOR EACH ROW
+EXECUTE FUNCTION validar_solapamiento_presentacion();
+
+COMMIT;
+
+-- Trigger 2: Registrar en una tabla de auditoría cada modificación del precio de un tipo de
+-- entrada, indicando precio anterior, precio nuevo, usuario y fecha.
 CREATE OR REPLACE FUNCTION fn_auditar_cambio_precio()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -228,7 +283,9 @@ AFTER UPDATE ON tipo_entrada
 For EACH ROW
 EXECUTE FUNCTION fn_auditar_cambio_precio();
 
--- Vista Materializada: Ventas y ocupación por Festival y Tipo de entrada
+-- Vista Materializada: "Ventas y Ocupación por Festival y Tipo de Entrada", con
+-- recaudación total y porcentaje de aforo vendido, refrescada diariamente al cierre de
+-- ventas.
 CREATE MATERIALIZED VIEW mv_ventas_ocupacion_festival AS
 SELECT
     f.id AS id_festival,
