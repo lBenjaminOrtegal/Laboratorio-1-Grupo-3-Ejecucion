@@ -24,15 +24,7 @@ function Home() {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button
-                  size="lg"
-                  className="gap-2"
-                  onClick={() => navigate("/line-up")}
-                >
-                  Ver Line-Up
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
+              <div className="flex flex-col sm:flex-row pt-4">
                 <Button
                   size="lg"
                   variant="outline"

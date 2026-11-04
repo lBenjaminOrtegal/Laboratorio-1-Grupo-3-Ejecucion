@@ -2,7 +2,6 @@ import {Route, Routes} from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Home from "./pages/Home.tsx";
-import LineUp from "./pages/LineUp.tsx";
 import Festivals from "./pages/Festivals.tsx";
 import FestivalDetail from "./pages/FestivalDetail.tsx";
 import CreateFestival from "./pages/CreateFestival.tsx";
@@ -27,7 +26,6 @@ function App() {
                 <main className="flex-1">
                     <Routes>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/line-up" element={<LineUp/>}/>
                         <Route path="/festivals" element={<Festivals/>}/>
                         <Route path="/create-festival" element={<ProtectedRoute element={<CreateFestival/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/create-performance" element={<ProtectedRoute element={<CreatePerformance/>} requiredRole="PRODUCTOR" />}/>

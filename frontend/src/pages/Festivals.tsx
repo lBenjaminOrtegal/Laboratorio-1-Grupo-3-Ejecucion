@@ -213,6 +213,7 @@ function Festivals() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredFestivals.map((festival) => (
                 <Card
+                  onClick={() => navigate(`/festivals/${festival.id}`)}
                   key={festival.id}
                   className="overflow-hidden hover:shadow-lg transition-shadow hover:border-accent cursor-pointer group"
                 >
@@ -258,7 +259,6 @@ function Festivals() {
                         className="w-full gap-2 group/btn"
                         variant={festival.estado === 'ACTIVO' ? 'default' : 'outline'}
                         disabled={festival.estado !== 'ACTIVO'}
-                        onClick={() => navigate(`/festivals/${festival.id}`)}
                       >
                         {festival.estado === 'ACTIVO' ? (
                           <>
