@@ -34,7 +34,7 @@ function App() {
                         <Route path="/producer-panel" element={<ProtectedRoute element={<ProducerPanel/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/festivals/:id" element={<FestivalDetail/>}/>
                         <Route path="/sales-report" element={<ProtectedRoute element = {<Dashboard/>} requiredRole="PRODUCTOR"/>}/>
-                        <Route path="/sales-audit" element={<ProtectedRoute element = {<AuditoriaPage/>} requiredRole="PRODUCTOR"/>}/>
+                        <Route path="/price-audit" element={<ProtectedRoute element = {<AuditoriaPage/>} requiredRole="PRODUCTOR"/>}/>
                         <Route path="/manage-performances" element={<ProtectedRoute element={<ManagePerformances/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/access-control" element={<ProtectedRoute element={<AccessControl/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/my-tickets" element={<ProtectedRoute element={<MyTickets/>} requiredRole="ASISTENTE" />}/>

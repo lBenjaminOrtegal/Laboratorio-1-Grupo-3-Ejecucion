@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart, Mic2, Bell } from "lucide-react";
+import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart, Mic2, Bell, BadgeDollarSign, ChartNoAxesColumn, ChartNoAxesColumnIncreasing } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -247,6 +247,25 @@ function NavBarComponent() {
                       </DropdownMenuItem>
                     </Link>
                   )}
+
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/price-audit" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <BadgeDollarSign className="w-4 h-4" />
+                        Auditoría de precios
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/sales-report" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <ChartNoAxesColumnIncreasing className="w-4 h-4" />
+                        Reporte de ventas
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+
                   {user.rol === 'ASISTENTE' && (
                     <Link to="/my-tickets" className="w-full">
                       <DropdownMenuItem className="gap-2 cursor-pointer">
@@ -401,6 +420,20 @@ function NavBarComponent() {
                         <Button variant="ghost" className="w-full justify-start gap-2">
                           <Ticket className="w-4 h-4" />
                           Control de Acceso
+                        </Button>
+                      </Link>
+
+                      <Link to="/price-audit" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Ticket className="w-4 h-4" />
+                          Auditoría de precios
+                        </Button>
+                      </Link>
+
+                      <Link to="/sales-report" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Ticket className="w-4 h-4" />
+                          Reporte de ventas
                         </Button>
                       </Link>
                     </>
