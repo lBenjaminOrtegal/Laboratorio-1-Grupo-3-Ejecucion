@@ -555,6 +555,5 @@ Se puede registrar o iniciar sesion con:
 2. Explorar festivales disponibles
 3. Comprar entradas
 4. Ver mis tickets
-5. Usar QR para acceso en el evento
 
 ---
