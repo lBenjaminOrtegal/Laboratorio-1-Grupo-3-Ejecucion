@@ -20,12 +20,12 @@ RESTART IDENTITY CASCADE;
 -- 1. USUARIOS
 -- -------------------------------------------------------------------------
 INSERT INTO usuario (nombre, apellido, correo, contrasena, credito_acumulado, rol) VALUES
-('Carlos', 'Mendoza', 'carlos.productor@festivales.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'PRODUCTOR'),
-('Javiera', 'Soto', 'javiera.productora@festivales.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'PRODUCTOR'),
-('Matias', 'Rojas', 'matias.rojas@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 15000, 'ASISTENTE'),
-('Valentina', 'Diaz', 'valentina.diaz@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'ASISTENTE'),
-('Diego', 'Fuentes', 'diego.fuentes@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 15000, 'ASISTENTE'),
-('Camila', 'Silva', 'camila.silva@correo.cl', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8D0R6V5G2K1b9x.N5h0W2yY1Z8K6aG', 0, 'ASISTENTE');
+('Carlos', 'Mendoza', 'productor1@festicedo.cl', '$2a$12$I0ovxG4KawRh64zpzWSBoOvkbsnpyIYpdXBhTiolqCH0WziKVVTui', 0, 'PRODUCTOR'),
+('Javiera', 'Soto', 'productor2@festicedo.cl', '$2a$12$I0ovxG4KawRh64zpzWSBoOvkbsnpyIYpdXBhTiolqCH0WziKVVTui', 0, 'PRODUCTOR'),
+('Matias', 'Rojas', 'asistente1@festicedo.cl', '$2a$12$I0ovxG4KawRh64zpzWSBoOvkbsnpyIYpdXBhTiolqCH0WziKVVTui', 15000, 'ASISTENTE'),
+('Valentina', 'Diaz', 'asistente2@festicedo.cl', '$2a$12$I0ovxG4KawRh64zpzWSBoOvkbsnpyIYpdXBhTiolqCH0WziKVVTui', 0, 'ASISTENTE'),
+('Diego', 'Fuentes', 'asistente3@festicedo.cl', '$2a$12$I0ovxG4KawRh64zpzWSBoOvkbsnpyIYpdXBhTiolqCH0WziKVVTui', 15000, 'ASISTENTE'),
+('Camila', 'Silva', 'asistente4@festicedo.cl', '$2a$12$I0ovxG4KawRh64zpzWSBoOvkbsnpyIYpdXBhTiolqCH0WziKVVTui', 0, 'ASISTENTE');
 
 -- -------------------------------------------------------------------------
 -- 2. RECINTOS

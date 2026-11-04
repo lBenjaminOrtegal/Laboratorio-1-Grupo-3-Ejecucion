@@ -3,7 +3,7 @@ import { Calendar, Search, AlertCircle, Music } from "lucide-react";
 import presentacionService from "../services/presentacion.service";
 import festivalService from "../services/festival.service";
 import type {
-  Presentacion,
+  PresentacionGrilla,
   PresentacionesEscenario,
 } from "../interfaces/presentacion.interface";
 import { Button } from "../components/ui/button";
@@ -17,13 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
-
-interface Festival {
-  id: number;
-  nombre: string;
-  fecha_inicio: string;
-  fecha_fin: string;
-}
+import type { Festival } from "@/interfaces/festival.interface";
 
 function LineUp() {
   const [loading, setLoading] = useState(true);
@@ -40,7 +34,7 @@ function LineUp() {
       setLoading(true);
       const dateToUse = selectedDate || getTodayDate();
       const response = await presentacionService.getLineUp(id_festival, dateToUse);
-      setLineUp(response.data);
+      setLineUp(response || []);
     } catch (error) {
       console.error("Error al cargar line-up:", error);
       setLineUp([]);
@@ -236,7 +230,7 @@ function LineUp() {
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                    {escenario.presentaciones.map((presentacion: Presentacion) => (
+                    {escenario.presentaciones.map((presentacion: PresentacionGrilla) => (
                       <div
                         key={presentacion.id_presentacion}
                         className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow"

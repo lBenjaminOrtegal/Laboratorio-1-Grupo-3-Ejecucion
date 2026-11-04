@@ -7,18 +7,18 @@ function PresentacionCard(presentacion: Presentacion) {
       <div className="card-header d-flex flex-row justify-content-between align-items-center gap-2 bg-transparent">
         <h5
           className="card-title mb-0 text-truncate"
-          title={presentacion.nombre_artista}
+          title={presentacion.artista_nombre}
         >
-          {presentacion.nombre_artista}
+          {presentacion.artista_nombre}
         </h5>
         <span className="badge theme-accent flex-shrink-0">
-          {presentacion.genero_artista}
+          {presentacion.artista_genero}
         </span>
       </div>
 
       <div className="card-body d-flex flex-column justify-content-between">
         <p className="card-subtitle text-body-secondary fw-medium mb-3">
-          {presentacion.nombre_festival}
+          {presentacion.festival_nombre}
         </p>
 
         {/* Bloque de horario con ícono de reloj */}

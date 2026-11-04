@@ -5,7 +5,9 @@ import Home from "./pages/Home.tsx";
 import LineUp from "./pages/LineUp.tsx";
 import Festivals from "./pages/Festivals.tsx";
 import CreateFestival from "./pages/CreateFestival.tsx";
+import CreatePerformance from "./pages/CreatePerformance.tsx";
 import ManageFestivals from "./pages/ManageFestivals.tsx";
+import ManagePerformances from "./pages/ManagePerformances.tsx";
 import AccessControl from "./pages/AccessControl.tsx";
 import MyTickets from "./pages/MyTickets.tsx";
 import MyPurchases from "./pages/MyPurchases.tsx";
@@ -26,7 +28,9 @@ function App() {
                         <Route path="/line-up" element={<LineUp/>}/>
                         <Route path="/festivals" element={<Festivals/>}/>
                         <Route path="/create-festival" element={<ProtectedRoute element={<CreateFestival/>} requiredRole="PRODUCTOR" />}/>
+                        <Route path="/create-performance" element={<ProtectedRoute element={<CreatePerformance/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/manage-festivals" element={<ProtectedRoute element={<ManageFestivals/>} requiredRole="PRODUCTOR" />}/>
+                        <Route path="/manage-performances" element={<ProtectedRoute element={<ManagePerformances/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/access-control" element={<ProtectedRoute element={<AccessControl/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/my-tickets" element={<ProtectedRoute element={<MyTickets/>} requiredRole="ASISTENTE" />}/>
                         <Route path="/my-purchases" element={<ProtectedRoute element={<MyPurchases/>} requiredRole="ASISTENTE" />}/>

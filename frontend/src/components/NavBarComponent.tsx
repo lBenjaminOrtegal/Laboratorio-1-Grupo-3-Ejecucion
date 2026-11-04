@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart } from "lucide-react";
+import { Menu, X, Music, Home, LogOut, User, Plus, Pencil, HandMetalIcon, Ticket, ShoppingCart, Mic2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -99,6 +99,22 @@ function NavBarComponent() {
                       <DropdownMenuItem className="gap-2 cursor-pointer">
                         <Pencil className="w-4 h-4" />
                         Gestionar Festivales
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/create-performance" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Mic2 className="w-4 h-4" />
+                        Crear Presentación
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  {user.rol === 'PRODUCTOR' && (
+                    <Link to="/manage-performances" className="w-full">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Music className="w-4 h-4" />
+                        Ver Presentaciones
                       </DropdownMenuItem>
                     </Link>
                   )}
@@ -204,10 +220,22 @@ function NavBarComponent() {
                           Crear Festival
                         </Button>
                       </Link>
+                      <Link to="/create-presentacion" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Mic2 className="w-4 h-4" />
+                          Crear Presentación
+                        </Button>
+                      </Link>
                       <Link to="/manage-festivals" onClick={() => setIsMenuOpen(false)} className="block">
                         <Button variant="ghost" className="w-full justify-start gap-2">
                           <Pencil className="w-4 h-4" />
                           Gestionar Festivales
+                        </Button>
+                      </Link>
+                      <Link to="/manage-presentaciones" onClick={() => setIsMenuOpen(false)} className="block">
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <Music className="w-4 h-4" />
+                          Ver Presentaciones
                         </Button>
                       </Link>
                       <Link to="/access-control" onClick={() => setIsMenuOpen(false)} className="block">

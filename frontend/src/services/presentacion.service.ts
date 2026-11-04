@@ -1,40 +1,43 @@
-import httpClient from './api.ts';
-import type {CreatePresentacionDTO, UpdatePresentacionDTO} from "../interfaces/presentacion.interface.ts";
+import type { CreatePresentacionDTO } from '@/interfaces/presentacion.interface';
+import httpClient from './api';
 
-const getAll = () => {
-    return httpClient.get('/api/presentaciones');
-}
+const presentacionService = {
+  getAll: async () => {
+    const response = await httpClient.get('/api/presentaciones');
+    return response.data;
+  },
 
-const getById = (id: number) => {
-    return httpClient.get(`/api/presentaciones/${id}`);
-}
+  getById: async (id: number) => {
+    const response = await httpClient.get(`/api/presentaciones/${id}`);
+    return response.data;
+  },
 
-const getLineUp = (idFestival: number, fecha: string) => {
-    return httpClient.get('/api/presentaciones/grilla', {
-        params: {
-            id_festival: idFestival,
-            fecha: fecha
-        }
+  getLineUp: async (id_festival: number, fecha: string) => {
+    const response = await httpClient.get('/api/presentaciones/grilla', {
+      params: { id_festival, fecha },
     });
+    return response.data;
+  },
+
+  create: async (data: CreatePresentacionDTO) => {
+    const response = await httpClient.post('/api/presentaciones', data);
+    return response.data;
+  },
+
+  update: async (id: number, data: Partial<CreatePresentacionDTO>) => {
+    const response = await httpClient.put(`/api/presentaciones/${id}`, data);
+    return response.data;
+  },
+
+  delete: async (id: number) => {
+    const response = await httpClient.delete(`/api/presentaciones/${id}`);
+    return response.data;
+  },
+
+  cancelar: async (id: number) => {
+    const response = await httpClient.post(`/api/presentaciones/${id}/cancelar`);
+    return response.data;
+  },
 };
 
-const create = (data: CreatePresentacionDTO) => {
-    return httpClient.post('/presentaciones', data);
-}
-
-const update = (id: number, data: UpdatePresentacionDTO) => {
-    return httpClient.put(`/api/presentaciones/${id}`, data);
-}
-
-const deleteById = (id: number) => {
-    return httpClient.delete(`/api/presentaciones/${id}`);
-}
-
-export default {
-    getAll,
-    getById,
-    getLineUp,
-    create,
-    update,
-    deleteById,
-};
+export default presentacionService;
