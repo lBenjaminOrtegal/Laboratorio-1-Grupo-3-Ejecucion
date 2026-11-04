@@ -60,3 +60,11 @@ export interface UpdateTicketDTO {
   fecha_uso?: string;
   id_tipo_entrada?: number;
 }
+
+export type MetodoPago = 'TARJETA_DEBITO' | 'TARJETA_CREDITO';
+
+export interface BuyTicketsDTO {
+  id_tipo_entrada: number;
+  cantidad: number;
+  metodo_pago: MetodoPago;
+}

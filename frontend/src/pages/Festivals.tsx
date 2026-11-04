@@ -13,6 +13,7 @@ import {
 import festivalService from '@/services/festival.service';
 import type { Festival } from '@/interfaces/festival.interface';
 import { formatearFecha, getStatusColor, getStatusLabel } from '@/utils/formatUtils';
+import { useNavigate } from 'react-router-dom';
 
 function Festivals() {
   const [festivals, setFestivals] = useState<Festival[]>([]);
@@ -22,6 +23,7 @@ function Festivals() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
+  const navigate = useNavigate();
 
   // Cargar festivales
   useEffect(() => {
@@ -256,6 +258,7 @@ function Festivals() {
                         className="w-full gap-2 group/btn"
                         variant={festival.estado === 'ACTIVO' ? 'default' : 'outline'}
                         disabled={festival.estado !== 'ACTIVO'}
+                        onClick={() => navigate(`/festivals/${festival.id}`)}
                       >
                         {festival.estado === 'ACTIVO' ? (
                           <>

@@ -1,5 +1,5 @@
 import httpClient from './api';
-import type { Ticket, CreateTicketDTO, UpdateTicketDTO, TicketEnriquecido } from '@/interfaces/ticket.interface';
+import type { Ticket, CreateTicketDTO, UpdateTicketDTO, TicketEnriquecido, BuyTicketsDTO } from '@/interfaces/ticket.interface';
 
 /**
  * Valida un ticket mediante su código único
@@ -62,6 +62,14 @@ const deleteTicket = (idOrdenCompra: number, id: number) => {
   return httpClient.delete<Ticket>(`/api/tickets/${idOrdenCompra}/${id}`);
 };
 
+/**
+ * Compra entradas ejecutando el procedimiento almacenado
+ * Requiere rol ASISTENTE (el id_asistente se toma del token JWT)
+ */
+const buyTickets = (data: BuyTicketsDTO) => {
+  return httpClient.post<{ mensaje: string; data: TicketEnriquecido[] }>('/api/tickets/comprar', data);
+};
+
 export default {
   validateTicket,
   getTicketsByUser,
@@ -70,4 +78,7 @@ export default {
   createTicket,
   updateTicket,
   deleteTicket,
+  buyTickets,
 };
+
+
