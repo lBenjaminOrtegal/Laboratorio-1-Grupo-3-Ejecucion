@@ -965,7 +965,7 @@ function ProducerPanel() {
                                     }
                                     required
                                   />
-                                  <div className="flex gap-2">
+                                  <div className="flex">
                                     <Input
                                       type="date"
                                       value={newTipoEntrada.fecha_acceso}
@@ -977,9 +977,8 @@ function ProducerPanel() {
                                       }
                                       required
                                     />
-                                    <Button type="submit" size="sm" className="gap-1 flex-shrink-0">
+                                    <Button type="submit" size="sm" className="flex-shrink-0">
                                       <Plus className="w-4 h-4" />
-                                      Agregar
                                     </Button>
                                   </div>
                                 </form>
