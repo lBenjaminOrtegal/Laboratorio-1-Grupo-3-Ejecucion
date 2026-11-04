@@ -172,6 +172,7 @@ export class TicketRepository {
      * Obtiene todos los tickets de un usuario específico
      * - Busca mediante orden_compra.id_asistente
      * - Incluye nombre del tipo de entrada (JOIN con tipo_entrada)
+     * - Incluye nombre del festival (JOIN con festival a través de tipo_entrada)
      * - Retorna tickets ordenados por orden_compra e id
      * 
      * @param idUsuario - ID del usuario (asistente)
@@ -185,10 +186,12 @@ export class TicketRepository {
                    t.codigo_unico,
                    t.fecha_uso,
                    t.id_tipo_entrada,
-                   te.nombre as tipo_entrada_nombre
+                   te.nombre as tipo_entrada_nombre,
+                   f.nombre as festival
             FROM ticket t
             INNER JOIN orden_compra oc ON t.id_orden_compra = oc.id
             LEFT JOIN tipo_entrada te ON t.id_tipo_entrada = te.id
+            LEFT JOIN festival f ON te.id_festival = f.id
             WHERE oc.id_asistente = $1
             ORDER BY t.id_orden_compra ASC, t.id ASC;
         `;
@@ -223,10 +226,12 @@ export class TicketRepository {
                    t.codigo_unico,
                    t.fecha_uso,
                    t.id_tipo_entrada,
-                   te.nombre as tipo_entrada_nombre
+                   te.nombre as tipo_entrada_nombre,
+                   f.nombre as festival
             FROM ticket t
             INNER JOIN orden_compra oc ON t.id_orden_compra = oc.id
             LEFT JOIN tipo_entrada te ON t.id_tipo_entrada = te.id
+            LEFT JOIN festival f ON te.id_festival = f.id
             WHERE oc.id = (
                 SELECT MAX(id) FROM orden_compra WHERE id_asistente = $1
             )

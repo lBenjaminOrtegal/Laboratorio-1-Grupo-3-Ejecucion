@@ -178,10 +178,12 @@ function MyTickets() {
                           <div className="flex items-start justify-between">
                             <div>
                               <CardTitle className="text-base">Ticket #{ticket.id}</CardTitle>
-                              <CardDescription>
-                                {ticket.tipo_entrada_nombre 
-                                  ? `${ticket.tipo_entrada_nombre}` 
-                                  : `ID Tipo Entrada: ${ticket.id_tipo_entrada}`}
+                              <CardDescription className="space-y-1">
+                                <div>
+                                  {ticket.tipo_entrada_nombre 
+                                    ? `${ticket.tipo_entrada_nombre}` 
+                                    : `ID Tipo Entrada: ${ticket.id_tipo_entrada}`}
+                                </div>
                               </CardDescription>
                             </div>
                             <div
@@ -219,7 +221,15 @@ function MyTickets() {
                           </div>
 
                           {/* Información */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {ticket.festival && (
+                              <div className="space-y-1">
+                                <p className="text-xs font-medium text-muted-foreground">Festival</p>
+                                <p className="text-sm font-semibold text-accent">
+                                  {ticket.festival}
+                                </p>
+                              </div>
+                            )}
                             <div className="space-y-1">
                               <p className="text-xs font-medium text-muted-foreground">Tipo de Entrada</p>
                               <p className="text-sm font-semibold text-foreground">
