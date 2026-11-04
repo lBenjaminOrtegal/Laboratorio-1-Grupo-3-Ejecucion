@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import reporteService from '@/services/reporte.service';
+import reporteService from '@/services/report.service';
 import type { ReporteVentasOcupacion } from '@/interfaces/reporte.interface';
 
 // Interfaz para agrupar los datos visualmente por festival

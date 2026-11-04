@@ -17,6 +17,8 @@ import Register from "./pages/Register.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Unauthorized from "./pages/Unauthorized.tsx";
 import NavBarComponent from "./components/NavBarComponent.tsx";
+import AuditoriaPage from "./pages/AuditoriaPage.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 
 function App() {
     return (
@@ -29,8 +31,10 @@ function App() {
                         <Route path="/festivals" element={<Festivals/>}/>
                         <Route path="/create-festival" element={<ProtectedRoute element={<CreateFestival/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/create-performance" element={<ProtectedRoute element={<CreatePerformance/>} requiredRole="PRODUCTOR" />}/>
-                        <Route path="/manage-festivals" element={<ProtectedRoute element={<ProducerPanel/>} requiredRole="PRODUCTOR" />}/>
+                        <Route path="/producer-panel" element={<ProtectedRoute element={<ProducerPanel/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/festivals/:id" element={<FestivalDetail/>}/>
+                        <Route path="/sales-report" element={<ProtectedRoute element = {<Dashboard/>} requiredRole="PRODUCTOR"/>}/>
+                        <Route path="/sales-audit" element={<ProtectedRoute element = {<AuditoriaPage/>} requiredRole="PRODUCTOR"/>}/>
                         <Route path="/manage-performances" element={<ProtectedRoute element={<ManagePerformances/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/access-control" element={<ProtectedRoute element={<AccessControl/>} requiredRole="PRODUCTOR" />}/>
                         <Route path="/my-tickets" element={<ProtectedRoute element={<MyTickets/>} requiredRole="ASISTENTE" />}/>

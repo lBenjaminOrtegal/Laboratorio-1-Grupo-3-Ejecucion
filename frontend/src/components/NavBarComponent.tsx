@@ -216,7 +216,7 @@ function NavBarComponent() {
                     </Link>
                   )}
                   {user.rol === 'PRODUCTOR' && (
-                    <Link to="/manage-festivals" className="w-full">
+                    <Link to="/producer-panel" className="w-full">
                       <DropdownMenuItem className="gap-2 cursor-pointer">
                         <Pencil className="w-4 h-4" />
                         Panel
