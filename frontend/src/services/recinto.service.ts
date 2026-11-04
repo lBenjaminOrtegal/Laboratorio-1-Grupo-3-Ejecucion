@@ -10,7 +10,7 @@ const getById = (id: number) => {
 }
 
 const create = (data: CreateRecintoDTO) => {
-    return httpClient.post('/recintos', data);
+    return httpClient.post('/api/recintos', data);
 }
 
 const update = (id: number, data: UpdateRecintoDTO) => {
