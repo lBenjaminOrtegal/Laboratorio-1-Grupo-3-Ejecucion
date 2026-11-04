@@ -15,6 +15,7 @@ import recintoRoutes from "./routes/recinto.routes.js";
 import auditoriaRoutes from "./routes/auditoria.routes.js";
 
 import authRoutes from "./routes/auth.routes.js";
+import reporteRoutes from "./routes/reporte.routes.js";
 
 const app: Application = express();
 
@@ -36,6 +37,7 @@ app.use("/api/recintos", recintoRoutes); // CRUD Recintos
 app.use("/api/auditorias", auditoriaRoutes); // CRUD Auditorias
 app.use("/api/usuarios", usuariosRoutes); // CRUD Usuarios
 app.use("/api/notificaciones", notificacionesRoutes); // CRUD Notificaciones
+app.use("/api/reportes", reporteRoutes) // Endpoints de reportes
 app.use("/api/auth", authRoutes); // Endpoints de autenticacion
 
 app.use(errorHandler);
